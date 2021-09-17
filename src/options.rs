@@ -129,6 +129,9 @@ pub(crate) struct UploadOptions {
     /// Pretend shows title, date, description and more that would be used and exits
     #[structopt(long)]
     pub pretend: bool,
+    /// path to ffmpeg binary
+    #[structopt(long, default_value = "ffmpeg")]
+    pub ffmpeg_bin: PathBuf,
 }
 
 #[derive(Debug, StructOpt)]

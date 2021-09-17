@@ -1,6 +1,8 @@
+use std::path::PathBuf;
 use structopt::StructOpt;
 
 mod date_compute;
+mod ffmpeg;
 mod options;
 
 use options::{Command, Options};
@@ -8,7 +10,7 @@ use options::{Command, Options};
 fn main() -> anyhow::Result<()> {
     let options = Options::from_args();
     match options.cmd {
-        Command::Upload(options) => {
+        Command::Upload(mut options) => {
             if options.pretend {
                 println!("publish-at: {:?}", options.publish_at());
                 println!("publish-datetime: {}", options.publish_datetime()?);
@@ -25,6 +27,22 @@ fn main() -> anyhow::Result<()> {
                 println!("youtube-tags: {:?}", &options.tags());
                 std::process::exit(0);
             }
+            // if no thumbnail given, check if video-filename with .jpg extension exists (=default
+            // thumbnail), if not make one with that filename
+            if options.thumbnail.is_none() {
+                let mut thumb_path = PathBuf::from(&options.file);
+                thumb_path.set_extension("jpg");
+                if !thumb_path.exists() {
+                    let screenshot_fn = ffmpeg::bg_from_video(
+                        &options.ffmpeg_bin,
+                        &options.file,
+                        options.thumb_second,
+                    );
+                    // TODO: make thumbnail
+                }
+                options.thumbnail = Some(thumb_path);
+            }
+            println!("thumbnail-path: {:?}", &options.thumbnail);
         }
         Command::List(options) => {
             if options.publish_methods {
