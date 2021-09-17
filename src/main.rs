@@ -4,6 +4,7 @@ use structopt::StructOpt;
 mod date_compute;
 mod ffmpeg;
 mod options;
+mod thumbnail;
 
 use options::{Command, Options};
 
@@ -38,7 +39,12 @@ fn main() -> anyhow::Result<()> {
                         &options.file,
                         options.thumb_second,
                     );
-                    // TODO: make thumbnail
+                    thumbnail::make_thumbnail(
+                        &thumb_path,
+                        &screenshot_fn,
+                        &options.thumbnail_watermark,
+                        &options.title(),
+                    );
                 }
                 options.thumbnail = Some(thumb_path);
             }

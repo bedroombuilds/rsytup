@@ -42,12 +42,12 @@ pub enum Categories {
 
 /// Parse a single key-value pair from `KEY=VALUE` format
 /// if `=` is missing VALUE is assumed to be empty string
-fn parse_key_val<T, U>(s: &str) -> Result<(T, U), Box<dyn Error>>
+fn parse_key_val<T, U>(s: &str) -> anyhow::Result<(T, U)>
 where
     T: std::str::FromStr,
-    T::Err: Error + 'static,
+    T::Err: Error + 'static + Send + Sync,
     U: std::str::FromStr,
-    U::Err: Error + 'static,
+    U::Err: Error + 'static + Send + Sync,
 {
     match s.find('=') {
         Some(pos) => Ok((s[..pos].parse()?, s[pos + 1..].parse()?)),
@@ -76,10 +76,6 @@ pub(crate) enum Command {
 }
 
 #[derive(Debug, StructOpt)]
-#[structopt(
-    name = "Rust Youtube uploader",
-    about = "helps automating youtube uploads"
-)]
 pub(crate) struct UploadOptions {
     /// filename of video to upload
     #[structopt(short, long)]
@@ -93,6 +89,9 @@ pub(crate) struct UploadOptions {
     /// thumbnail file to use (otherwise generated from video)
     #[structopt(long)]
     pub thumbnail: Option<PathBuf>,
+    /// thumbnail watermark file to use, will be placed ontop of screenshot
+    #[structopt(long, default_value = "logos.png")]
+    pub thumbnail_watermark: PathBuf,
     /// auto-create thumbnail from video at this second
     #[structopt(long, default_value = "360")]
     pub thumb_second: usize,
@@ -157,6 +156,9 @@ pub(crate) struct UpdateOptions {
     /// uploads new thumbnail to youtube
     #[structopt(long)]
     pub generate_thumbnail: Option<PathBuf>,
+    /// thumbnail watermark file to use, will be placed ontop of screenshot
+    #[structopt(long, default_value = "logos.png")]
+    pub thumbnail_watermark: PathBuf,
     /// the description text of all uploaded Videos
     #[structopt(long)]
     pub description: Option<PathBuf>,
