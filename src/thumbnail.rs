@@ -1,4 +1,6 @@
 //! Helpers to create a Youtube thumbnail images
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright © 2021 Michael Kefeder
 use image::imageops::overlay;
 use image::Rgba;
 use imageproc::drawing::{draw_text_mut, Canvas};

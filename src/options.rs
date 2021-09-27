@@ -1,3 +1,6 @@
+//! Command line options and configuration settings for rsytup
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright © 2021 Michael Kefeder
 use crate::date_compute;
 use std::error::Error;
 use std::path::PathBuf;

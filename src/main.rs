@@ -1,3 +1,7 @@
+//! rsytup - Rust YouTube uploader
+//! a tool to automate common actions when uploading a video to youtube
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright © 2021 Michael Kefeder
 use std::path::PathBuf;
 use structopt::StructOpt;
 

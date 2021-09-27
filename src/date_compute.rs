@@ -1,3 +1,6 @@
+//! Collection of helper functions to do necessary date computation
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright © 2021 Michael Kefeder
 use chrono::{Datelike, NaiveDate, NaiveDateTime, Weekday};
 
 /// NaiveDate from ISO 8601 string
