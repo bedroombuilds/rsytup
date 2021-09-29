@@ -9,10 +9,13 @@ mod date_compute;
 mod ffmpeg;
 mod options;
 mod thumbnail;
+mod youtube;
 
 use options::{Command, Options};
 
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    env_logger::init();
     let options = Options::from_args();
     match options.cmd {
         Command::Upload(mut options) => {
@@ -60,7 +63,8 @@ fn main() -> anyhow::Result<()> {
                 std::process::exit(0);
             }
             if options.yt_top5 {
-                eprintln!("Not yet implemented");
+                let mut cl = youtube::video_service().await;
+                youtube::video_list(&mut cl).await;
                 std::process::exit(1);
             }
             if options.uploaded {
