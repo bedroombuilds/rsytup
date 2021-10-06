@@ -174,6 +174,9 @@ pub(crate) struct UpdateOptions {
     /// add video to playlist with given id
     #[structopt(long)]
     pub add_to_playlist: Option<String>,
+    /// path to ffmpeg binary
+    #[structopt(long, default_value = "ffmpeg")]
+    pub ffmpeg_bin: PathBuf,
 }
 
 impl UploadOptions {

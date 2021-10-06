@@ -56,6 +56,23 @@ async fn main() -> anyhow::Result<()> {
                 options.thumbnail = Some(thumb_path);
             }
             println!("thumbnail-path: {:?}", &options.thumbnail);
+            let mut cl = youtube::video_service().await;
+            let video_id = youtube::upload_file(&mut cl, &options).await?;
+            println!("upload video_id {:?}", &video_id);
+            let mut cl = youtube::thumbnail_service().await;
+
+            if options.thumbnail.is_some() {
+                let _ = youtube::upload_thumbnail(
+                    &mut cl,
+                    &video_id,
+                    options.thumbnail.as_ref().unwrap(),
+                )
+                .await;
+            }
+            if options.playlist_id.is_some() {
+                let mut cl = youtube::playlist_service().await;
+                let _ = youtube::add_to_playlist(&mut cl, &options, &video_id).await;
+            }
         }
         Command::List(options) => {
             if options.publish_methods {
@@ -72,8 +89,69 @@ async fn main() -> anyhow::Result<()> {
                 std::process::exit(1);
             }
         }
-        Command::Update(_options) => {
-            eprintln!("Not yet implemented");
+        Command::Update(options) => {
+            let mut cl = youtube::video_service().await;
+            let mut chsrv = youtube::channels_service().await;
+            let vids = if options.video_id == "uploaded" {
+                youtube::uploaded_video_list(&mut chsrv).await?
+            } else {
+                vec![youtube::YtVid::from_id(&mut cl, &options.video_id).await?]
+            };
+            if let Some(new_thumb) = options.generate_thumbnail {
+                let entries = std::fs::read_dir(&new_thumb)?
+                    .map(|res| res.map(|e| e.path()))
+                    .collect::<Result<Vec<_>, std::io::Error>>()?;
+                println!("{:#?}", entries);
+                let mov_ext = Some(std::ffi::OsStr::new("mov"));
+                let mut tsrv = youtube::thumbnail_service().await;
+                for v in vids {
+                    if let Some((episode_nr, ep_title)) = &v.title.split_once('.') {
+                        // text on thumbnail is without episode nr and series info
+                        let ep_title = match ep_title.split_once('-') {
+                            Some((t, _)) => t.trim(),
+                            None => ep_title,
+                        };
+                        let video_fn: PathBuf = entries
+                            .iter()
+                            .filter(|vfn| {
+                                vfn.file_name()
+                                    .map(|x| x.to_str().unwrap().starts_with(episode_nr))
+                                    .unwrap()
+                                    && vfn.extension() == mov_ext
+                            })
+                            .take(1)
+                            .collect();
+                        println!("Video {} {:?}", &episode_nr, &video_fn);
+                        let mut thumb_path = PathBuf::from(&video_fn);
+                        thumb_path.set_extension("jpg");
+                        let screenshot_fn = ffmpeg::bg_from_video(
+                            &options.ffmpeg_bin,
+                            &video_fn,
+                            options.thumb_second,
+                        );
+                        thumbnail::make_thumbnail(
+                            &thumb_path,
+                            &screenshot_fn,
+                            &options.thumbnail_watermark,
+                            ep_title,
+                        );
+                        let _ = youtube::upload_thumbnail(&mut tsrv, &v.id, thumb_path).await;
+                    }
+                }
+            } else if let Some(desc) = options.description {
+                let new_desc = std::fs::read_to_string(&desc)?;
+                for v in vids {
+                    youtube::change_description(&mut cl, &v.id, &new_desc, options.change_desc)
+                        .await?;
+                }
+            } else if let Some(playlist_id) = options.add_to_playlist {
+                eprintln!(
+                    "at some point in time this will add a video_id to a playlist: {}",
+                    &playlist_id
+                );
+            } else {
+                eprintln!("not implemented");
+            }
         }
     }
     Ok(())
