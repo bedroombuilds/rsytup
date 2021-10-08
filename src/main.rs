@@ -59,9 +59,9 @@ async fn main() -> anyhow::Result<()> {
             let mut cl = youtube::video_service().await;
             let video_id = youtube::upload_file(&mut cl, &options).await?;
             println!("upload video_id {:?}", &video_id);
-            let mut cl = youtube::thumbnail_service().await;
 
             if options.thumbnail.is_some() {
+                let mut cl = youtube::thumbnail_service().await;
                 let _ = youtube::upload_thumbnail(
                     &mut cl,
                     &video_id,
