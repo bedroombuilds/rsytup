@@ -8880,7 +8880,6 @@ impl CaptionsService {
         let (_resp, headers): (EmptyResponse, hyper::HeaderMap) =
             do_request_with_headers(&self.client, &full_uri, &headers, "PUT", opt_request).await?;
         if let Some(dest) = headers.get(hyper::header::LOCATION) {
-            use std::convert::TryFrom;
             Ok(ResumableUpload::new(
                 hyper::Uri::try_from(dest.to_str()?)?,
                 &self.client,
@@ -9006,7 +9005,6 @@ impl CaptionsService {
         let (_resp, headers): (EmptyResponse, hyper::HeaderMap) =
             do_request_with_headers(&self.client, &full_uri, &headers, "POST", opt_request).await?;
         if let Some(dest) = headers.get(hyper::header::LOCATION) {
-            use std::convert::TryFrom;
             Ok(ResumableUpload::new(
                 hyper::Uri::try_from(dest.to_str()?)?,
                 &self.client,
@@ -11237,7 +11235,6 @@ impl WatermarksService {
         let (_resp, headers): (EmptyResponse, hyper::HeaderMap) =
             do_request_with_headers(&self.client, &full_uri, &headers, "POST", opt_request).await?;
         if let Some(dest) = headers.get(hyper::header::LOCATION) {
-            use std::convert::TryFrom;
             Ok(ResumableUpload::new(
                 hyper::Uri::try_from(dest.to_str()?)?,
                 &self.client,
@@ -11454,7 +11451,6 @@ impl ThumbnailsService {
         let (_resp, headers): (EmptyResponse, hyper::HeaderMap) =
             do_request_with_headers(&self.client, &full_uri, &headers, "POST", opt_request).await?;
         if let Some(dest) = headers.get(hyper::header::LOCATION) {
-            use std::convert::TryFrom;
             Ok(ResumableUpload::new(
                 hyper::Uri::try_from(dest.to_str()?)?,
                 &self.client,
@@ -12487,7 +12483,6 @@ impl ChannelBannersService {
         let (_resp, headers): (EmptyResponse, hyper::HeaderMap) =
             do_request_with_headers(&self.client, &full_uri, &headers, "POST", opt_request).await?;
         if let Some(dest) = headers.get(hyper::header::LOCATION) {
-            use std::convert::TryFrom;
             Ok(ResumableUpload::new(
                 hyper::Uri::try_from(dest.to_str()?)?,
                 &self.client,
@@ -13312,7 +13307,6 @@ impl VideosService {
         let (_resp, headers): (EmptyResponse, hyper::HeaderMap) =
             do_request_with_headers(&self.client, &full_uri, &headers, "POST", opt_request).await?;
         if let Some(dest) = headers.get(hyper::header::LOCATION) {
-            use std::convert::TryFrom;
             Ok(ResumableUpload::new(
                 hyper::Uri::try_from(dest.to_str()?)?,
                 &self.client,
