@@ -1,8 +1,10 @@
 //! Helpers to create a Youtube thumbnail images
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright © 2021 Michael Kefeder
+use conv::ValueInto;
 use image::imageops::overlay;
 use image::Rgba;
+use imageproc::definitions::Clamp;
 use imageproc::drawing::{draw_text_mut, Canvas};
 use rusttype::{point, Font, Scale};
 
@@ -10,7 +12,7 @@ use rusttype::{point, Font, Scale};
 fn draw_centered_text<I>(image: &mut I, color: I::Pixel, text: &str)
 where
     I: Canvas,
-    <I::Pixel as image::Pixel>::Subpixel: conv::ValueInto<f32> + imageproc::definitions::Clamp<f32>,
+    <I::Pixel as image::Pixel>::Subpixel: ValueInto<f32> + Clamp<f32>,
 {
     // Load the font
     // ATTENTION Inter-VariableFont_slnt does not work, ttf parser unwrap() panics!
@@ -48,8 +50,8 @@ where
         draw_text_mut(
             image,
             color,
-            (image.width() - glyphs_width) / 2,
-            y_offset,
+            ((image.width() - glyphs_width) / 2).try_into().unwrap(),
+            y_offset.try_into().unwrap(),
             scale,
             &font,
             text,
