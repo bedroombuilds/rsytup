@@ -26,4 +26,10 @@ rsytup --help
 # list the current top 5 videos on youtube (best to verify your client_secret
 # and token_cache
 rsytup list --yt-top5
+# upload practical example: uploading the video, setting keywords, title and adding to a playlist
+cargo run -- upload -f "29. Pattern matching revisited.mov" \
+    -d "revisiting pattern matching now that Python 3.10 has been released" \
+    --playlist-id "PLEIv4NBmh-your-random-id" \
+    --keywords "rust,tutorial,python,structural,pattern,matching" \
+    --title "29. Pattern matching - From Python to Rust"
 ```
