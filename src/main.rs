@@ -2,8 +2,8 @@
 //! a tool to automate common actions when uploading a video to youtube
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright © 2021 Michael Kefeder
+use clap::Parser;
 use std::path::PathBuf;
-use structopt::StructOpt;
 
 mod date_compute;
 mod ffmpeg;
@@ -16,11 +16,11 @@ use options::{Command, Options};
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     env_logger::init();
-    let options = Options::from_args();
+    let options = Options::parse();
     match options.cmd {
         Command::Upload(mut options) => {
             if options.pretend {
-                println!("publish-at: {:?}", options.publish_at());
+                println!("publish-at: {:?}", options.publish_at);
                 println!("publish-datetime: {}", options.publish_datetime()?);
                 if let Ok(episode_nr) = options.episode_nr() {
                     println!("episode_nr: {} (0x{:X})", episode_nr, episode_nr);

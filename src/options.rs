@@ -1,16 +1,17 @@
 //! Command line options and configuration settings for rsytup
+use strum::{EnumMessage, IntoEnumIterator};
+
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright © 2021 Michael Kefeder
 use crate::date_compute;
 use std::error::Error;
 use std::path::PathBuf;
-use structopt::StructOpt;
-use strum::VariantNames;
-use strum_macros::{EnumString, EnumVariantNames};
 
-#[derive(Debug, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, strum::EnumIter, strum::EnumMessage)]
 #[strum(serialize_all = "kebab_case")]
 pub enum PublishDate {
+    /// current date at 0 o'clock, publishes therefore as soon as possible
+    Asap,
     /// compute date of coming weekday, e.g. friday computes the date of next friday
     Coming(String),
     /// add weeks from episode number found in title / given as argument, see first_episode_date
@@ -21,22 +22,51 @@ pub enum PublishDate {
     IsoDateTime(String),
 }
 
-#[derive(Debug, EnumString, EnumVariantNames, Clone, Copy)]
-#[strum(serialize_all = "kebab_case")]
+impl std::str::FromStr for PublishDate {
+    type Err = anyhow::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let (k, v) = parse_key_val::<String, String>(s)?;
+        match k.as_str() {
+            "asap" => Ok(PublishDate::Asap),
+            "coming" => Ok(PublishDate::Coming(v)),
+            "weeks-from-episode" => Ok(PublishDate::WeeksFromEpisode),
+            "iso-date" => Ok(PublishDate::IsoDate(v)),
+            "iso-date-time" => Ok(PublishDate::IsoDateTime(v)),
+            _ => anyhow::bail!("variant not found"),
+        }
+    }
+}
+
+#[derive(Debug, clap::ValueEnum, Clone, Copy)]
+#[clap(rename_all = "kebab_case")]
 pub enum ChangeMode {
     Append,
     Replace,
     Prepend,
 }
 
+#[derive(Debug, clap::ValueEnum, Clone, Copy, strum::Display)]
+#[clap(rename_all = "kebab_case")]
+#[strum(serialize_all = "kebab_case")]
+pub enum PrivacyStates {
+    Public,
+    Private,
+    Unlisted,
+}
+
 pub fn print_publish_date_enum() {
-    for m in PublishDate::VARIANTS {
-        println!("{}", m);
+    for m in PublishDate::iter() {
+        println!(
+            "{:?} {}",
+            m.get_serializations(),
+            m.get_documentation().unwrap()
+        );
     }
 }
 
-#[derive(Debug, EnumString, EnumVariantNames, Clone, Copy)]
-#[strum(serialize_all = "kebab_case")]
+#[derive(Debug, clap::ValueEnum, Clone, Copy)]
+#[clap(rename_all = "kebab_case")]
 pub enum Categories {
     Science = 28,
     People = 22,
@@ -58,17 +88,17 @@ where
     }
 }
 
-#[derive(Debug, StructOpt)]
-#[structopt(
+#[derive(Debug, clap::Parser)]
+#[clap(
     name = "Rust Youtube uploader",
     about = "helps automating youtube uploads"
 )]
 pub(crate) struct Options {
-    #[structopt(subcommand)]
+    #[clap(subcommand)]
     pub cmd: Command,
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, clap::Parser)]
 pub(crate) enum Command {
     /// Upload Content to Youtube
     Upload(UploadOptions),
@@ -78,130 +108,114 @@ pub(crate) enum Command {
     Update(UpdateOptions),
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, clap::Parser)]
 pub(crate) struct UploadOptions {
     /// filename of video to upload
-    #[structopt(short, long)]
+    #[clap(short, long)]
     pub file: PathBuf,
     /// description of youtube video
-    #[structopt(short, long)]
+    #[clap(short, long)]
     pub description: String,
     /// title if none given created from filename
-    #[structopt(short, long)]
+    #[clap(short, long)]
     pub title: Option<String>,
     /// thumbnail file to use (otherwise generated from video)
-    #[structopt(long)]
+    #[clap(long)]
     pub thumbnail: Option<PathBuf>,
     /// thumbnail watermark file to use, will be placed ontop of screenshot
-    #[structopt(long, default_value = "logos.png")]
+    #[clap(long, default_value = "logos.png")]
     pub thumbnail_watermark: PathBuf,
     /// auto-create thumbnail from video at this second
-    #[structopt(long, default_value = "360")]
+    #[clap(long, default_value = "360")]
     pub thumb_second: usize,
     /// date to publish at, can be computed format <method>=<value>
     /// to see all available methods use `list --publish-methods`
-    #[structopt(short, long,
-        default_value = "coming=friday",
-        case_insensitive = true,
-        parse(try_from_str = parse_key_val),
-        number_of_values = 1,
-        )]
-    pub publish_at: (PublishDate, String),
+    #[clap(short, long, default_value = "coming=friday", number_of_values = 1)]
+    pub publish_at: PublishDate,
     /// publishing day-time
-    #[structopt(short = "T", long, default_value = "08:00:00")]
+    #[clap(short = 'T', long, default_value = "08:00:00")]
     pub publish_time: String,
     /// Number of episode (if not in title)
-    #[structopt(short, long)]
+    #[clap(short, long)]
     pub episode_nr: Option<u8>,
     /// add video to Playlist (if given)
-    #[structopt(long)]
+    #[clap(long)]
     pub playlist_id: Option<String>,
     /// comma separated keywords list
-    #[structopt(long, default_value = "rust,tutorial,youtube,upload,rsytup")]
+    #[clap(long, default_value = "rust,tutorial,youtube,upload,rsytup")]
     pub keywords: String,
     /// privacy status
-    #[structopt(long, default_value="private", possible_values = &["public", "private", "unlisted"])]
-    pub privacy_status: String,
+    #[clap(long, default_value = "private")]
+    pub privacy_status: PrivacyStates,
     /// Category
-    #[structopt(long, default_value="science", possible_values = &Categories::VARIANTS)]
+    #[clap(long, default_value = "science")]
     pub category: Categories,
     /// Date of First episode
-    #[structopt(long, default_value = "2020-09-01")]
+    #[clap(long, default_value = "2020-09-01")]
     pub first_episode_date: String,
     /// Pretend shows title, date, description and more that would be used and exits
-    #[structopt(long)]
+    #[clap(long)]
     pub pretend: bool,
     /// path to ffmpeg binary
-    #[structopt(long, default_value = "ffmpeg")]
+    #[clap(long, default_value = "ffmpeg")]
     pub ffmpeg_bin: PathBuf,
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, clap::Parser)]
 pub(crate) struct ListOptions {
     /// List top 5 videos of youtube
-    #[structopt(long)]
+    #[clap(long)]
     pub yt_top5: bool,
     /// List your uploaded videos
-    #[structopt(long)]
+    #[clap(long)]
     pub uploaded: bool,
     /// Shows a list of available methods to compute publish date
-    #[structopt(long)]
+    #[clap(long)]
     pub publish_methods: bool,
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, clap::Parser)]
 pub(crate) struct UpdateOptions {
     /// video ID, to loop over all videos use "uploaded"
-    #[structopt(long)]
+    #[clap(long)]
     pub video_id: String,
     /// (re-)generates thumbnail from path where the videos are stored
     /// for a given video ID. Matches filenames using the episode_nr in the title.
     /// uploads new thumbnail to youtube
-    #[structopt(long)]
+    #[clap(long)]
     pub generate_thumbnail: Option<PathBuf>,
     /// thumbnail watermark file to use, will be placed ontop of screenshot
-    #[structopt(long, default_value = "logos.png")]
+    #[clap(long, default_value = "logos.png")]
     pub thumbnail_watermark: PathBuf,
     /// the description text of all uploaded Videos
-    #[structopt(long)]
+    #[clap(long)]
     pub description: Option<PathBuf>,
     /// the description text of all uploaded Videos
-    #[structopt(long, default_value = "append")]
+    #[clap(long, default_value = "append")]
     pub change_desc: ChangeMode,
     /// auto-create thumbnail from video at this second
-    #[structopt(long, default_value = "360")]
+    #[clap(long, default_value = "360")]
     pub thumb_second: usize,
     /// add video to playlist with given id
-    #[structopt(long)]
+    #[clap(long)]
     pub add_to_playlist: Option<String>,
     /// path to ffmpeg binary
-    #[structopt(long, default_value = "ffmpeg")]
+    #[clap(long, default_value = "ffmpeg")]
     pub ffmpeg_bin: PathBuf,
 }
 
 impl UploadOptions {
-    /// Parse a single key-value pair into PublishDate
-    pub fn publish_at(&self) -> PublishDate {
-        let value: String = self.publish_at.1.clone();
-        match &self.publish_at.0 {
-            PublishDate::Coming(_) => PublishDate::Coming(value),
-            PublishDate::WeeksFromEpisode => PublishDate::WeeksFromEpisode,
-            PublishDate::IsoDate(_) => PublishDate::IsoDate(value),
-            PublishDate::IsoDateTime(_) => PublishDate::IsoDateTime(value),
-        }
-    }
-
     pub fn tags(&self) -> Vec<String> {
         self.keywords.split(',').map(String::from).collect()
     }
 
     pub fn publish_datetime(&self) -> anyhow::Result<String> {
         let today = chrono::offset::Local::now().naive_local().date();
-        match self.publish_at() {
-            // TODO: require chrono >= PR release https://github.com/chronotope/chrono/pull/539
+        match &self.publish_at {
+            PublishDate::Asap => Ok(format!("{:?}T00:00:00Z", today)),
             PublishDate::Coming(wd) => Ok(format!(
                 "{:?}T{}Z",
-                date_compute::coming_weekday(today, wd.parse()?),
+                date_compute::coming_weekday(today, wd.to_owned().parse()?),
                 self.publish_time
             )),
             PublishDate::WeeksFromEpisode => Ok(format!(
@@ -214,12 +228,12 @@ impl UploadOptions {
             )),
             PublishDate::IsoDate(date) => Ok(format!(
                 "{:?}T{}Z",
-                date_compute::parse_iso_date(&date)?,
+                date_compute::parse_iso_date(date)?,
                 self.publish_time
             )),
             PublishDate::IsoDateTime(datetime) => Ok(format!(
                 "{:?}Z",
-                date_compute::parse_iso_datetime(&datetime)?
+                date_compute::parse_iso_datetime(datetime)?
             )),
         }
     }

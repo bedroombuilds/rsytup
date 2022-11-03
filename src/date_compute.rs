@@ -23,7 +23,6 @@ pub fn coming_weekday(start: NaiveDate, weekday: Weekday) -> NaiveDate {
         return add_weeks(start, 1);
     }
     for d in start.iter_days().take(7) {
-        dbg!(d.weekday(), &weekday);
         if d.weekday() == weekday {
             return d;
         }

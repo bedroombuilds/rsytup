@@ -73,5 +73,5 @@ where
     draw_centered_text(&mut image, Rgba([227u8, 228u8, 229u8, 255u8]), text);
     overlay(&mut image, &logos, 0, 0);
 
-    let _ = image.save(&target).unwrap();
+    image.save(&target).unwrap();
 }

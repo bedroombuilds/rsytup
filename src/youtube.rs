@@ -135,7 +135,7 @@ pub(crate) async fn upload_file(
         ..Default::default()
     };
     let vstatus = yt::VideoStatus {
-        privacy_status: Some(options.privacy_status.clone()),
+        privacy_status: Some(options.privacy_status.to_string()),
         publish_at: Some(options.publish_datetime().unwrap()),
         self_declared_made_for_kids: Some(false),
         ..Default::default()
