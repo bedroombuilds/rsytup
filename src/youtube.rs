@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright © 2021 Michael Kefeder
+// SPDX-FileCopyrightText: © 2021 Michael Kefeder
 //! YouTube API connection and helper functions
 
 mod oauth_flow;

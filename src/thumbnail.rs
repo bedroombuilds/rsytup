@@ -1,6 +1,6 @@
 //! Helpers to create a Youtube thumbnail images
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright © 2021 Michael Kefeder
+// SPDX-FileCopyrightText: © 2021 Michael Kefeder
 use image::Rgba;
 use image::imageops::overlay;
 use imageproc::definitions::Clamp;

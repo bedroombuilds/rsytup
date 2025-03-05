@@ -1,12 +1,12 @@
 //! Command line options and configuration settings for rsytup
-use strum::{EnumMessage, IntoEnumIterator};
-
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright © 2021 Michael Kefeder
-use crate::date_compute;
+// SPDX-FileCopyrightText: © 2021 Michael Kefeder
 use std::error::Error;
 use std::path::PathBuf;
 
+use strum::{EnumMessage, IntoEnumIterator};
+
+use crate::date_compute;
 #[derive(Debug, Clone, strum::EnumIter, strum::EnumMessage)]
 #[strum(serialize_all = "kebab_case")]
 pub enum PublishDate {
