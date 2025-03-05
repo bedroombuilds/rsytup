@@ -18,11 +18,11 @@ conv = "0.3.3"
 env_logger = "0.11.6"
 hyper-rustls = "0.22"
 hyper = "0.14.32"
-image = "0.24.9"
-imageproc = "0.23.0"
-rusttype = "0.9.3"
+image = "0.25.5"
+imageproc = "0.25.0"
 serde = "1.0.218"
 clap = { version = "4.5", features = ["derive"] }
 strum = { version = "0.27.1", features = ["derive", "strum_macros"] }
 tokio = { version = "1.43.0", features = ["rt-multi-thread", "io-util", "macros", "fs"] }
 webbrowser = "1.0.3"
+ab_glyph = "0.2.29"

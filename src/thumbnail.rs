@@ -1,50 +1,28 @@
 //! Helpers to create a Youtube thumbnail images
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright © 2021 Michael Kefeder
-use conv::ValueInto;
-use image::imageops::overlay;
 use image::Rgba;
+use image::imageops::overlay;
 use imageproc::definitions::Clamp;
-use imageproc::drawing::{draw_text_mut, Canvas};
-use rusttype::{point, Font, Scale};
+use imageproc::drawing::{Canvas, draw_text_mut, text_size};
 
 /// Draws text centered to the image
 fn draw_centered_text<I>(image: &mut I, color: I::Pixel, text: &str)
 where
     I: Canvas,
-    <I::Pixel as image::Pixel>::Subpixel: ValueInto<f32> + Clamp<f32>,
+    <I::Pixel as image::Pixel>::Subpixel: Into<f32> + Clamp<f32>,
 {
     // Load the font
-    // ATTENTION Inter-VariableFont_slnt does not work, ttf parser unwrap() panics!
+    // TODO: still true? ATTENTION Inter-VariableFont_slnt does not work, ttf parser unwrap() panics!
     let font_data = include_bytes!("../assets/Inter-Bold.ttf");
-    // This only succeeds if collection consists of one font
-    let font = Font::try_from_bytes(font_data as &[u8]).expect("Error constructing Font");
+    // TODO: still true? - This only succeeds if collection consists of one font
+    let font = ab_glyph::FontRef::try_from_slice(font_data).unwrap();
 
-    // The font size to use
-    let scale = Scale::uniform(192.0);
-
-    let v_metrics = font.v_metrics(scale);
-
+    let font_size = 192.0;
     let mut y_offset = 660;
     for text in text.split('\n') {
-        // layout the glyphs in a line with 20 pixels padding
-        let glyphs: Vec<_> = font
-            .layout(text, scale, point(20.0, 20.0 + v_metrics.ascent))
-            .collect();
-        // work out the layout size
-        let glyphs_height = (v_metrics.ascent - v_metrics.descent).ceil() as u32;
-        let glyphs_width = {
-            let min_x = glyphs
-                .first()
-                .map(|g| g.pixel_bounding_box().unwrap().min.x)
-                .unwrap();
-            let max_x = glyphs
-                .last()
-                .map(|g| g.pixel_bounding_box().unwrap().max.x)
-                .unwrap();
-            (max_x - min_x) as u32
-        };
-        // TODO: if too wide, auto-wrap text?
+        // TODO: if too wide, auto-wrap text? inspiration <https://github.com/alexheretic/ab-glyph/blob/main/dev/src/layout.rs>
+        let (glyphs_width, glyphs_height) = text_size(font_size, &font, text);
         assert!(glyphs_width < 1600);
         assert!(y_offset + glyphs_height < image.height());
         draw_text_mut(
@@ -52,7 +30,7 @@ where
             color,
             ((image.width() - glyphs_width) / 2).try_into().unwrap(),
             y_offset.try_into().unwrap(),
-            scale,
+            font_size,
             &font,
             text,
         );
