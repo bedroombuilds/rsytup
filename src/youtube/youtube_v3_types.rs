@@ -8622,7 +8622,7 @@ impl ActivitiesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8722,7 +8722,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8759,7 +8759,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8792,7 +8792,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8830,7 +8830,7 @@ impl CaptionsService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8869,7 +8869,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8917,7 +8917,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8955,7 +8955,7 @@ impl CaptionsService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8994,7 +8994,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9038,7 +9038,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9142,7 +9142,7 @@ impl AbuseReportsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9247,7 +9247,7 @@ impl PlaylistsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9281,7 +9281,7 @@ impl PlaylistsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9311,7 +9311,7 @@ impl PlaylistsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9340,7 +9340,7 @@ impl PlaylistsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9444,7 +9444,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9474,7 +9474,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9507,7 +9507,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9540,7 +9540,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9572,7 +9572,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9601,7 +9601,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9630,7 +9630,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9734,7 +9734,7 @@ impl LiveChatMessagesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9767,7 +9767,7 @@ impl LiveChatMessagesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9796,7 +9796,7 @@ impl LiveChatMessagesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9900,7 +9900,7 @@ impl LiveChatBansService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9930,7 +9930,7 @@ impl LiveChatBansService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10030,7 +10030,7 @@ impl TestsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10131,7 +10131,7 @@ impl SearchService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10235,7 +10235,7 @@ impl LiveStreamsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10269,7 +10269,7 @@ impl LiveStreamsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10299,7 +10299,7 @@ impl LiveStreamsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10328,7 +10328,7 @@ impl LiveStreamsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10428,7 +10428,7 @@ impl SubscriptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10460,7 +10460,7 @@ impl SubscriptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10493,7 +10493,7 @@ impl SubscriptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10587,7 +10587,7 @@ impl ThirdPartyLinksService {
         let mut headers = vec![];
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10606,7 +10606,7 @@ impl ThirdPartyLinksService {
         let mut headers = vec![];
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10628,7 +10628,7 @@ impl ThirdPartyLinksService {
         let mut headers = vec![];
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10647,7 +10647,7 @@ impl ThirdPartyLinksService {
         let mut headers = vec![];
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10747,7 +10747,7 @@ impl MembersService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10847,7 +10847,7 @@ impl ChannelSectionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10879,7 +10879,7 @@ impl ChannelSectionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10912,7 +10912,7 @@ impl ChannelSectionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10946,7 +10946,7 @@ impl ChannelSectionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11047,7 +11047,7 @@ impl SponsorsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11147,7 +11147,7 @@ impl WatermarksService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11185,7 +11185,7 @@ impl WatermarksService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11224,7 +11224,7 @@ impl WatermarksService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11268,7 +11268,7 @@ impl WatermarksService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11368,7 +11368,7 @@ impl ThumbnailsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11404,7 +11404,7 @@ impl ThumbnailsService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11441,7 +11441,7 @@ impl ThumbnailsService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11558,7 +11558,7 @@ impl VideoCategoriesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11661,7 +11661,7 @@ impl MembershipsLevelsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11765,7 +11765,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11795,7 +11795,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11828,7 +11828,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11858,7 +11858,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11887,7 +11887,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11919,7 +11919,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12022,7 +12022,7 @@ impl SuperChatEventsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12126,7 +12126,7 @@ impl LiveChatModeratorsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12159,7 +12159,7 @@ impl LiveChatModeratorsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12188,7 +12188,7 @@ impl LiveChatModeratorsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12291,7 +12291,7 @@ impl I18nLanguagesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12395,7 +12395,7 @@ impl ChannelBannersService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12433,7 +12433,7 @@ impl ChannelBannersService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12472,7 +12472,7 @@ impl ChannelBannersService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12590,7 +12590,7 @@ impl CommentThreadsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12623,7 +12623,7 @@ impl CommentThreadsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12657,7 +12657,7 @@ impl CommentThreadsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12758,7 +12758,7 @@ impl I18nRegionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12861,7 +12861,7 @@ impl PlaylistItemsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12894,7 +12894,7 @@ impl PlaylistItemsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12928,7 +12928,7 @@ impl PlaylistItemsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12958,7 +12958,7 @@ impl PlaylistItemsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13061,7 +13061,7 @@ impl VideoAbuseReportReasonsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13161,7 +13161,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13190,7 +13190,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13219,7 +13219,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13257,7 +13257,7 @@ impl VideosService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13296,7 +13296,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13340,7 +13340,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13373,7 +13373,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13402,7 +13402,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13435,7 +13435,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13538,7 +13538,7 @@ impl ChannelsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13571,7 +13571,7 @@ impl ChannelsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
