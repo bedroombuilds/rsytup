@@ -12,11 +12,11 @@ categories = ["command-line-utilities", "multimedia"]
 
 [dependencies]
 anyhow = "1.0.97"
-async-google-apis-common = "0.3.0"
+async-google-apis-common = "0.4.0"
 chrono = "0.4.40"
 conv = "0.3.3"
 env_logger = "0.11.6"
-hyper-rustls = "0.22"
+hyper-rustls = { version = "0.23", features = ["http2", "rustls-native-certs"] }
 hyper = "0.14.32"
 image = "0.25.5"
 imageproc = "0.25.0"
