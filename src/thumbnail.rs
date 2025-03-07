@@ -51,5 +51,6 @@ where
     draw_centered_text(&mut image, Rgba([227u8, 228u8, 229u8, 255u8]), text);
     overlay(&mut image, &logos, 0, 0);
 
-    image.save(&target).unwrap();
+    let image = image::DynamicImage::ImageRgba8(image);
+    image.to_rgb8().save(&target).unwrap();
 }
