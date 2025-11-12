@@ -4648,56 +4648,56 @@ impl std::fmt::Display for ActivitiesListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.published_before {
+        if let Some(v) = &self.published_before {
             write!(
                 f,
                 "&publishedBefore={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.published_after {
+        if let Some(v) = &self.published_after {
             write!(
                 f,
                 "&publishedAfter={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.region_code {
+        if let Some(v) = &self.region_code {
             write!(
                 f,
                 "&regionCode={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.mine {
+        if let Some(v) = &self.mine {
             write!(
                 f,
                 "&mine={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.channel_id {
+        if let Some(v) = &self.channel_id {
             write!(
                 f,
                 "&channelId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.home {
+        if let Some(v) = &self.home {
             write!(
                 f,
                 "&home={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
@@ -4743,21 +4743,21 @@ impl std::fmt::Display for CaptionsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of {
+        if let Some(v) = &self.on_behalf_of {
             write!(
                 f,
                 "&onBehalfOf={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
@@ -4793,28 +4793,28 @@ pub struct CaptionsDownloadParams {
 
 impl std::fmt::Display for CaptionsDownloadParams {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if let Some(ref v) = self.on_behalf_of {
+        if let Some(v) = &self.on_behalf_of {
             write!(
                 f,
                 "&onBehalfOf={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.tfmt {
+        if let Some(v) = &self.tfmt {
             write!(
                 f,
                 "&tfmt={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.tlang {
+        if let Some(v) = &self.tlang {
             write!(
                 f,
                 "&tlang={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -4852,21 +4852,21 @@ impl std::fmt::Display for CaptionsUpdateParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of {
+        if let Some(v) = &self.on_behalf_of {
             write!(
                 f,
                 "&onBehalfOf={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.sync {
+        if let Some(v) = &self.sync {
             write!(
                 f,
                 "&sync={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -4904,21 +4904,21 @@ impl std::fmt::Display for CaptionsInsertParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.sync {
+        if let Some(v) = &self.sync {
             write!(
                 f,
                 "&sync={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of {
+        if let Some(v) = &self.on_behalf_of {
             write!(
                 f,
                 "&onBehalfOf={}",
@@ -4952,14 +4952,14 @@ impl std::fmt::Display for CaptionsDeleteParams {
             "&id={}",
             percent_encode(format!("{}", self.id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of {
+        if let Some(v) = &self.on_behalf_of {
             write!(
                 f,
                 "&onBehalfOf={}",
@@ -5016,14 +5016,14 @@ impl std::fmt::Display for PlaylistsInsertParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
@@ -5055,7 +5055,7 @@ impl std::fmt::Display for PlaylistsUpdateParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -5108,56 +5108,56 @@ impl std::fmt::Display for PlaylistsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.mine {
+        if let Some(v) = &self.mine {
             write!(
                 f,
                 "&mine={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.hl {
+        if let Some(v) = &self.hl {
             write!(
                 f,
                 "&hl={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.channel_id {
+        if let Some(v) = &self.channel_id {
             write!(
                 f,
                 "&channelId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
@@ -5188,7 +5188,7 @@ impl std::fmt::Display for PlaylistsDeleteParams {
             "&id={}",
             percent_encode(format!("{}", self.id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -5223,14 +5223,14 @@ impl std::fmt::Display for LiveBroadcastsInsertParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -5276,21 +5276,21 @@ impl std::fmt::Display for LiveBroadcastsBindParams {
             "&id={}",
             percent_encode(format!("{}", self.id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.stream_id {
+        if let Some(v) = &self.stream_id {
             write!(
                 f,
                 "&streamId={}",
@@ -5325,14 +5325,14 @@ impl std::fmt::Display for LiveBroadcastsUpdateParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
@@ -5387,14 +5387,14 @@ impl std::fmt::Display for LiveBroadcastsTransitionParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
@@ -5446,56 +5446,56 @@ impl std::fmt::Display for LiveBroadcastsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.mine {
+        if let Some(v) = &self.mine {
             write!(
                 f,
                 "&mine={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.broadcast_status {
+        if let Some(v) = &self.broadcast_status {
             write!(
                 f,
                 "&broadcastStatus={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.broadcast_type {
+        if let Some(v) = &self.broadcast_type {
             write!(
                 f,
                 "&broadcastType={}",
@@ -5547,35 +5547,35 @@ impl std::fmt::Display for LiveBroadcastsControlParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.walltime {
+        if let Some(v) = &self.walltime {
             write!(
                 f,
                 "&walltime={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.display_slate {
+        if let Some(v) = &self.display_slate {
             write!(
                 f,
                 "&displaySlate={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.offset_time_ms {
+        if let Some(v) = &self.offset_time_ms {
             write!(
                 f,
                 "&offsetTimeMs={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -5610,14 +5610,14 @@ impl std::fmt::Display for LiveBroadcastsDeleteParams {
             "&id={}",
             percent_encode(format!("{}", self.id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -5692,28 +5692,28 @@ impl std::fmt::Display for LiveChatMessagesListParams {
             )
             .to_string()
         )?;
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.hl {
+        if let Some(v) = &self.hl {
             write!(
                 f,
                 "&hl={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.profile_image_size {
+        if let Some(v) = &self.profile_image_size {
             write!(
                 f,
                 "&profileImageSize={}",
@@ -5917,210 +5917,210 @@ impl std::fmt::Display for SearchListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.order {
+        if let Some(v) = &self.order {
             write!(
                 f,
                 "&order={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.typ {
+        if let Some(v) = &self.typ {
             write!(
                 f,
                 "&type={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_embeddable {
+        if let Some(v) = &self.video_embeddable {
             write!(
                 f,
                 "&videoEmbeddable={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.published_before {
+        if let Some(v) = &self.published_before {
             write!(
                 f,
                 "&publishedBefore={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.location_radius {
+        if let Some(v) = &self.location_radius {
             write!(
                 f,
                 "&locationRadius={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.event_type {
+        if let Some(v) = &self.event_type {
             write!(
                 f,
                 "&eventType={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_type {
+        if let Some(v) = &self.video_type {
             write!(
                 f,
                 "&videoType={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.topic_id {
+        if let Some(v) = &self.topic_id {
             write!(
                 f,
                 "&topicId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.published_after {
+        if let Some(v) = &self.published_after {
             write!(
                 f,
                 "&publishedAfter={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.for_developer {
+        if let Some(v) = &self.for_developer {
             write!(
                 f,
                 "&forDeveloper={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_caption {
+        if let Some(v) = &self.video_caption {
             write!(
                 f,
                 "&videoCaption={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.for_mine {
+        if let Some(v) = &self.for_mine {
             write!(
                 f,
                 "&forMine={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_dimension {
+        if let Some(v) = &self.video_dimension {
             write!(
                 f,
                 "&videoDimension={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_license {
+        if let Some(v) = &self.video_license {
             write!(
                 f,
                 "&videoLicense={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.related_to_video_id {
+        if let Some(v) = &self.related_to_video_id {
             write!(
                 f,
                 "&relatedToVideoId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_duration {
+        if let Some(v) = &self.video_duration {
             write!(
                 f,
                 "&videoDuration={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_definition {
+        if let Some(v) = &self.video_definition {
             write!(
                 f,
                 "&videoDefinition={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.channel_type {
+        if let Some(v) = &self.channel_type {
             write!(
                 f,
                 "&channelType={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.safe_search {
+        if let Some(v) = &self.safe_search {
             write!(
                 f,
                 "&safeSearch={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_category_id {
+        if let Some(v) = &self.video_category_id {
             write!(
                 f,
                 "&videoCategoryId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.relevance_language {
+        if let Some(v) = &self.relevance_language {
             write!(
                 f,
                 "&relevanceLanguage={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.location {
+        if let Some(v) = &self.location {
             write!(
                 f,
                 "&location={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.region_code {
+        if let Some(v) = &self.region_code {
             write!(
                 f,
                 "&regionCode={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_syndicated {
+        if let Some(v) = &self.video_syndicated {
             write!(
                 f,
                 "&videoSyndicated={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.channel_id {
+        if let Some(v) = &self.channel_id {
             write!(
                 f,
                 "&channelId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.for_content_owner {
+        if let Some(v) = &self.for_content_owner {
             write!(
                 f,
                 "&forContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.q {
+        if let Some(v) = &self.q {
             write!(
                 f,
                 "&q={}",
@@ -6155,14 +6155,14 @@ impl std::fmt::Display for LiveStreamsInsertParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
@@ -6197,14 +6197,14 @@ impl std::fmt::Display for LiveStreamsUpdateParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -6238,14 +6238,14 @@ impl std::fmt::Display for LiveStreamsDeleteParams {
             "&id={}",
             percent_encode(format!("{}", self.id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -6291,42 +6291,42 @@ impl std::fmt::Display for LiveStreamsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.mine {
+        if let Some(v) = &self.mine {
             write!(
                 f,
                 "&mine={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
@@ -6408,77 +6408,77 @@ impl std::fmt::Display for SubscriptionsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.for_channel_id {
+        if let Some(v) = &self.for_channel_id {
             write!(
                 f,
                 "&forChannelId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.my_subscribers {
+        if let Some(v) = &self.my_subscribers {
             write!(
                 f,
                 "&mySubscribers={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.order {
+        if let Some(v) = &self.order {
             write!(
                 f,
                 "&order={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.my_recent_subscribers {
+        if let Some(v) = &self.my_recent_subscribers {
             write!(
                 f,
                 "&myRecentSubscribers={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.channel_id {
+        if let Some(v) = &self.channel_id {
             write!(
                 f,
                 "&channelId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.mine {
+        if let Some(v) = &self.mine {
             write!(
                 f,
                 "&mine={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
@@ -6566,7 +6566,7 @@ impl std::fmt::Display for ThirdPartyLinksDeleteParams {
             )
             .to_string()
         )?;
-        if let Some(ref v) = self.part {
+        if let Some(v) = &self.part {
             write!(
                 f,
                 "&part={}",
@@ -6623,14 +6623,14 @@ impl std::fmt::Display for ThirdPartyLinksListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.typ {
+        if let Some(v) = &self.typ {
             write!(
                 f,
                 "&type={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.linking_token {
+        if let Some(v) = &self.linking_token {
             write!(
                 f,
                 "&linkingToken={}",
@@ -6674,35 +6674,35 @@ impl std::fmt::Display for MembersListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.has_access_to_level {
+        if let Some(v) = &self.has_access_to_level {
             write!(
                 f,
                 "&hasAccessToLevel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.mode {
+        if let Some(v) = &self.mode {
             write!(
                 f,
                 "&mode={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.filter_by_member_channel_id {
+        if let Some(v) = &self.filter_by_member_channel_id {
             write!(
                 f,
                 "&filterByMemberChannelId={}",
@@ -6733,7 +6733,7 @@ impl std::fmt::Display for ChannelSectionsDeleteParams {
             "&id={}",
             percent_encode(format!("{}", self.id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -6777,35 +6777,35 @@ impl std::fmt::Display for ChannelSectionsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.channel_id {
+        if let Some(v) = &self.channel_id {
             write!(
                 f,
                 "&channelId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.mine {
+        if let Some(v) = &self.mine {
             write!(
                 f,
                 "&mine={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.hl {
+        if let Some(v) = &self.hl {
             write!(
                 f,
                 "&hl={}",
@@ -6837,7 +6837,7 @@ impl std::fmt::Display for ChannelSectionsUpdateParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -6872,14 +6872,14 @@ impl std::fmt::Display for ChannelSectionsInsertParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
@@ -6917,21 +6917,21 @@ impl std::fmt::Display for SponsorsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.filter {
+        if let Some(v) = &self.filter {
             write!(
                 f,
                 "&filter={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
@@ -6962,7 +6962,7 @@ impl std::fmt::Display for WatermarksSetParams {
             "&channelId={}",
             percent_encode(format!("{}", self.channel_id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -6993,7 +6993,7 @@ impl std::fmt::Display for WatermarksUnsetParams {
             "&channelId={}",
             percent_encode(format!("{}", self.channel_id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -7025,7 +7025,7 @@ impl std::fmt::Display for ThumbnailsSetParams {
             "&videoId={}",
             percent_encode(format!("{}", self.video_id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -7061,21 +7061,21 @@ impl std::fmt::Display for VideoCategoriesListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.hl {
+        if let Some(v) = &self.hl {
             write!(
                 f,
                 "&hl={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.region_code {
+        if let Some(v) = &self.region_code {
             write!(
                 f,
                 "&regionCode={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
@@ -7206,35 +7206,35 @@ impl std::fmt::Display for CommentsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.parent_id {
+        if let Some(v) = &self.parent_id {
             write!(
                 f,
                 "&parentId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.text_format {
+        if let Some(v) = &self.text_format {
             write!(
                 f,
                 "&textFormat={}",
@@ -7300,7 +7300,7 @@ impl std::fmt::Display for CommentsSetModerationStatusParams {
             "&id={}",
             percent_encode(format!("{}", self.id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.ban_author {
+        if let Some(v) = &self.ban_author {
             write!(
                 f,
                 "&banAuthor={}",
@@ -7338,21 +7338,21 @@ impl std::fmt::Display for SuperChatEventsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.hl {
+        if let Some(v) = &self.hl {
             write!(
                 f,
                 "&hl={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
@@ -7421,14 +7421,14 @@ impl std::fmt::Display for LiveChatModeratorsListParams {
             )
             .to_string()
         )?;
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
@@ -7480,7 +7480,7 @@ impl std::fmt::Display for I18nLanguagesListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.hl {
+        if let Some(v) = &self.hl {
             write!(
                 f,
                 "&hl={}",
@@ -7510,21 +7510,21 @@ pub struct ChannelBannersInsertParams {
 
 impl std::fmt::Display for ChannelBannersInsertParams {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.channel_id {
+        if let Some(v) = &self.channel_id {
             write!(
                 f,
                 "&channelId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -7582,70 +7582,70 @@ impl std::fmt::Display for CommentThreadsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.channel_id {
+        if let Some(v) = &self.channel_id {
             write!(
                 f,
                 "&channelId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.all_threads_related_to_channel_id {
+        if let Some(v) = &self.all_threads_related_to_channel_id {
             write!(
                 f,
                 "&allThreadsRelatedToChannelId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.text_format {
+        if let Some(v) = &self.text_format {
             write!(
                 f,
                 "&textFormat={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.moderation_status {
+        if let Some(v) = &self.moderation_status {
             write!(
                 f,
                 "&moderationStatus={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_id {
+        if let Some(v) = &self.video_id {
             write!(
                 f,
                 "&videoId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.search_terms {
+        if let Some(v) = &self.search_terms {
             write!(
                 f,
                 "&searchTerms={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.order {
+        if let Some(v) = &self.order {
             write!(
                 f,
                 "&order={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
@@ -7720,7 +7720,7 @@ impl std::fmt::Display for I18nRegionsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.hl {
+        if let Some(v) = &self.hl {
             write!(
                 f,
                 "&hl={}",
@@ -7766,42 +7766,42 @@ impl std::fmt::Display for PlaylistItemsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.playlist_id {
+        if let Some(v) = &self.playlist_id {
             write!(
                 f,
                 "&playlistId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_id {
+        if let Some(v) = &self.video_id {
             write!(
                 f,
                 "&videoId={}",
@@ -7833,7 +7833,7 @@ impl std::fmt::Display for PlaylistItemsInsertParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -7865,7 +7865,7 @@ impl std::fmt::Display for PlaylistItemsUpdateParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -7896,7 +7896,7 @@ impl std::fmt::Display for PlaylistItemsDeleteParams {
             "&id={}",
             percent_encode(format!("{}", self.id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -7927,7 +7927,7 @@ impl std::fmt::Display for VideoAbuseReportReasonsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.hl {
+        if let Some(v) = &self.hl {
             write!(
                 f,
                 "&hl={}",
@@ -7958,7 +7958,7 @@ impl std::fmt::Display for VideosDeleteParams {
             "&id={}",
             percent_encode(format!("{}", self.id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -8030,35 +8030,35 @@ impl std::fmt::Display for VideosInsertParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner_channel {
+        if let Some(v) = &self.on_behalf_of_content_owner_channel {
             write!(
                 f,
                 "&onBehalfOfContentOwnerChannel={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.stabilize {
+        if let Some(v) = &self.stabilize {
             write!(
                 f,
                 "&stabilize={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.auto_levels {
+        if let Some(v) = &self.auto_levels {
             write!(
                 f,
                 "&autoLevels={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.notify_subscribers {
+        if let Some(v) = &self.notify_subscribers {
             write!(
                 f,
                 "&notifySubscribers={}",
@@ -8090,7 +8090,7 @@ impl std::fmt::Display for VideosUpdateParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -8121,7 +8121,7 @@ impl std::fmt::Display for VideosGetRatingParams {
             "&id={}",
             percent_encode(format!("{}", self.id).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -8184,84 +8184,84 @@ impl std::fmt::Display for VideosListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.chart {
+        if let Some(v) = &self.chart {
             write!(
                 f,
                 "&chart={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.locale {
+        if let Some(v) = &self.locale {
             write!(
                 f,
                 "&locale={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.hl {
+        if let Some(v) = &self.hl {
             write!(
                 f,
                 "&hl={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.my_rating {
+        if let Some(v) = &self.my_rating {
             write!(
                 f,
                 "&myRating={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_height {
+        if let Some(v) = &self.max_height {
             write!(
                 f,
                 "&maxHeight={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.region_code {
+        if let Some(v) = &self.region_code {
             write!(
                 f,
                 "&regionCode={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_width {
+        if let Some(v) = &self.max_width {
             write!(
                 f,
                 "&maxWidth={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.video_category_id {
+        if let Some(v) = &self.video_category_id {
             write!(
                 f,
                 "&videoCategoryId={}",
@@ -8285,7 +8285,7 @@ pub struct VideosReportAbuseParams {
 
 impl std::fmt::Display for VideosReportAbuseParams {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -8344,70 +8344,70 @@ impl std::fmt::Display for ChannelsListParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.my_subscribers {
+        if let Some(v) = &self.my_subscribers {
             write!(
                 f,
                 "&mySubscribers={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.id {
+        if let Some(v) = &self.id {
             write!(
                 f,
                 "&id={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.for_username {
+        if let Some(v) = &self.for_username {
             write!(
                 f,
                 "&forUsername={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.mine {
+        if let Some(v) = &self.mine {
             write!(
                 f,
                 "&mine={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.managed_by_me {
+        if let Some(v) = &self.managed_by_me {
             write!(
                 f,
                 "&managedByMe={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.category_id {
+        if let Some(v) = &self.category_id {
             write!(
                 f,
                 "&categoryId={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.page_token {
+        if let Some(v) = &self.page_token {
             write!(
                 f,
                 "&pageToken={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.max_results {
+        if let Some(v) = &self.max_results {
             write!(
                 f,
                 "&maxResults={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.hl {
+        if let Some(v) = &self.hl {
             write!(
                 f,
                 "&hl={}",
@@ -8439,7 +8439,7 @@ impl std::fmt::Display for ChannelsUpdateParams {
             "&part={}",
             percent_encode(format!("{}", self.part).as_bytes(), NON_ALPHANUMERIC).to_string()
         )?;
-        if let Some(ref v) = self.on_behalf_of_content_owner {
+        if let Some(v) = &self.on_behalf_of_content_owner {
             write!(
                 f,
                 "&onBehalfOfContentOwner={}",
@@ -8452,77 +8452,77 @@ impl std::fmt::Display for ChannelsUpdateParams {
 
 impl std::fmt::Display for YoutubeParams {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if let Some(ref v) = self.access_token {
+        if let Some(v) = &self.access_token {
             write!(
                 f,
                 "&access_token={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.upload_type {
+        if let Some(v) = &self.upload_type {
             write!(
                 f,
                 "&uploadType={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.callback {
+        if let Some(v) = &self.callback {
             write!(
                 f,
                 "&callback={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.key {
+        if let Some(v) = &self.key {
             write!(
                 f,
                 "&key={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.alt {
+        if let Some(v) = &self.alt {
             write!(
                 f,
                 "&alt={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.dollar_xgafv {
+        if let Some(v) = &self.dollar_xgafv {
             write!(
                 f,
                 "&$.xgafv={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.pretty_print {
+        if let Some(v) = &self.pretty_print {
             write!(
                 f,
                 "&prettyPrint={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.oauth_token {
+        if let Some(v) = &self.oauth_token {
             write!(
                 f,
                 "&oauth_token={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.fields {
+        if let Some(v) = &self.fields {
             write!(
                 f,
                 "&fields={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.upload_protocol {
+        if let Some(v) = &self.upload_protocol {
             write!(
                 f,
                 "&upload_protocol={}",
                 percent_encode(format!("{}", v).as_bytes(), NON_ALPHANUMERIC).to_string()
             )?;
         }
-        if let Some(ref v) = self.quota_user {
+        if let Some(v) = &self.quota_user {
             write!(
                 f,
                 "&quotaUser={}",
@@ -8622,7 +8622,7 @@ impl ActivitiesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8722,7 +8722,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8759,7 +8759,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8792,7 +8792,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8830,7 +8830,7 @@ impl CaptionsService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8869,7 +8869,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8917,7 +8917,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8955,7 +8955,7 @@ impl CaptionsService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -8994,7 +8994,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9038,7 +9038,7 @@ impl CaptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9142,7 +9142,7 @@ impl AbuseReportsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9247,7 +9247,7 @@ impl PlaylistsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9281,7 +9281,7 @@ impl PlaylistsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9311,7 +9311,7 @@ impl PlaylistsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9340,7 +9340,7 @@ impl PlaylistsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9444,7 +9444,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9474,7 +9474,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9507,7 +9507,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9540,7 +9540,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9572,7 +9572,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9601,7 +9601,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9630,7 +9630,7 @@ impl LiveBroadcastsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9734,7 +9734,7 @@ impl LiveChatMessagesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9767,7 +9767,7 @@ impl LiveChatMessagesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9796,7 +9796,7 @@ impl LiveChatMessagesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9900,7 +9900,7 @@ impl LiveChatBansService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -9930,7 +9930,7 @@ impl LiveChatBansService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10030,7 +10030,7 @@ impl TestsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10131,7 +10131,7 @@ impl SearchService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10235,7 +10235,7 @@ impl LiveStreamsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10269,7 +10269,7 @@ impl LiveStreamsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10299,7 +10299,7 @@ impl LiveStreamsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10328,7 +10328,7 @@ impl LiveStreamsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10428,7 +10428,7 @@ impl SubscriptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10460,7 +10460,7 @@ impl SubscriptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10493,7 +10493,7 @@ impl SubscriptionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10587,7 +10587,7 @@ impl ThirdPartyLinksService {
         let mut headers = vec![];
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10606,7 +10606,7 @@ impl ThirdPartyLinksService {
         let mut headers = vec![];
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10628,7 +10628,7 @@ impl ThirdPartyLinksService {
         let mut headers = vec![];
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10647,7 +10647,7 @@ impl ThirdPartyLinksService {
         let mut headers = vec![];
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10747,7 +10747,7 @@ impl MembersService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10847,7 +10847,7 @@ impl ChannelSectionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10879,7 +10879,7 @@ impl ChannelSectionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10912,7 +10912,7 @@ impl ChannelSectionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -10946,7 +10946,7 @@ impl ChannelSectionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11047,7 +11047,7 @@ impl SponsorsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11147,7 +11147,7 @@ impl WatermarksService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11185,7 +11185,7 @@ impl WatermarksService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11224,7 +11224,7 @@ impl WatermarksService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11268,7 +11268,7 @@ impl WatermarksService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11368,7 +11368,7 @@ impl ThumbnailsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11404,7 +11404,7 @@ impl ThumbnailsService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11441,7 +11441,7 @@ impl ThumbnailsService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11558,7 +11558,7 @@ impl VideoCategoriesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11661,7 +11661,7 @@ impl MembershipsLevelsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11765,7 +11765,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11795,7 +11795,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11828,7 +11828,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11858,7 +11858,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11887,7 +11887,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -11919,7 +11919,7 @@ impl CommentsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12022,7 +12022,7 @@ impl SuperChatEventsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12126,7 +12126,7 @@ impl LiveChatModeratorsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12159,7 +12159,7 @@ impl LiveChatModeratorsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12188,7 +12188,7 @@ impl LiveChatModeratorsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12291,7 +12291,7 @@ impl I18nLanguagesService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12395,7 +12395,7 @@ impl ChannelBannersService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12433,7 +12433,7 @@ impl ChannelBannersService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12472,7 +12472,7 @@ impl ChannelBannersService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12590,7 +12590,7 @@ impl CommentThreadsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12623,7 +12623,7 @@ impl CommentThreadsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12657,7 +12657,7 @@ impl CommentThreadsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12758,7 +12758,7 @@ impl I18nRegionsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12861,7 +12861,7 @@ impl PlaylistItemsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12894,7 +12894,7 @@ impl PlaylistItemsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12928,7 +12928,7 @@ impl PlaylistItemsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -12958,7 +12958,7 @@ impl PlaylistItemsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13061,7 +13061,7 @@ impl VideoAbuseReportReasonsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13161,7 +13161,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13190,7 +13190,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13219,7 +13219,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13257,7 +13257,7 @@ impl VideosService {
 
         let mut url_params = format!("?uploadType=multipart{params}", params = params);
 
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13296,7 +13296,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?uploadType=resumable{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13340,7 +13340,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13373,7 +13373,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13402,7 +13402,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13435,7 +13435,7 @@ impl VideosService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13538,7 +13538,7 @@ impl ChannelsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 
@@ -13571,7 +13571,7 @@ impl ChannelsService {
         ));
 
         let mut url_params = format!("?{params}", params = params);
-        if let Some(ref api_params) = &params.youtube_params {
+        if let Some(api_params) = &params.youtube_params {
             url_params.push_str(&format!("{}", api_params));
         }
 

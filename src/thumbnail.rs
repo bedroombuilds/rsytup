@@ -1,12 +1,12 @@
-//! Helpers to create a Youtube thumbnail images
+//! Helpers to create YouTube thumbnail images
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright © 2021 Michael Kefeder
 use conv::ValueInto;
-use image::imageops::overlay;
 use image::Rgba;
+use image::imageops::overlay;
 use imageproc::definitions::Clamp;
-use imageproc::drawing::{draw_text_mut, Canvas};
-use rusttype::{point, Font, Scale};
+use imageproc::drawing::{Canvas, draw_text_mut};
+use rusttype::{Font, Scale, point};
 
 /// Draws text centered to the image
 fn draw_centered_text<I>(image: &mut I, color: I::Pixel, text: &str)
@@ -27,11 +27,11 @@ where
 
     let mut y_offset = 660;
     for text in text.split('\n') {
-        // layout the glyphs in a line with 20 pixels padding
+        // Lays out the glyphs in a line with 20 pixels padding
         let glyphs: Vec<_> = font
             .layout(text, scale, point(20.0, 20.0 + v_metrics.ascent))
             .collect();
-        // work out the layout size
+        // Work out the layout size
         let glyphs_height = (v_metrics.ascent - v_metrics.descent).ceil() as u32;
         let glyphs_width = {
             let min_x = glyphs
@@ -64,11 +64,11 @@ pub fn make_thumbnail<P>(target: &P, background: &P, logos: &P, text: &str)
 where
     P: AsRef<std::path::Path>,
 {
-    let sb_img = image::open(&background).expect("Can't open background image.");
+    let sb_img = image::open(background).expect("Can't open background image.");
 
     let mut image = sb_img.to_rgba8();
 
-    let logos = image::open(&logos).expect("Can't open logos image.");
+    let logos = image::open(logos).expect("Can't open logos image.");
     let logos = logos.to_rgba8();
     draw_centered_text(&mut image, Rgba([227u8, 228u8, 229u8, 255u8]), text);
     overlay(&mut image, &logos, 0, 0);
