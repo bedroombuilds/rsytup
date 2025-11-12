@@ -11,18 +11,18 @@ categories = ["command-line-utilities", "multimedia"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.97"
 async-google-apis-common = "0.4.0"
-chrono = "0.4.40"
+anyhow = "1.0"
 conv = "0.3.3"
-env_logger = "0.11.6"
+env_logger = "0.11.8"
 hyper-rustls = { version = "0.23", features = ["http2", "rustls-native-certs"] }
 hyper = "0.14.32"
-image = "0.25.5"
+image = "0.25.8"
 imageproc = "0.25.0"
-serde = "1.0.218"
+serde = "1.0"
 clap = { version = "4.5", features = ["derive"] }
-strum = { version = "0.27.1", features = ["derive", "strum_macros"] }
-tokio = { version = "1.43.0", features = ["rt-multi-thread", "io-util", "macros", "fs"] }
-webbrowser = "1.0.3"
-ab_glyph = "0.2.29"
+strum = { version = "0.27.2", features = ["derive", "strum_macros"], default-features = false  }
+tokio = { version = "1.48.0", features = ["rt-multi-thread", "io-util", "macros", "fs"] }
+webbrowser = "1.0"
+ab_glyph = "0.2.32"
+chrono = { version = "0.4.42", default-features = false }
