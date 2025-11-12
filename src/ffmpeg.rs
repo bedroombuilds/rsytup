@@ -1,6 +1,6 @@
 //! ffmpeg helper functions
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright © 2021 Michael Kefeder
+// SPDX-FileCopyrightText: © 2021 Michael Kefeder
 use std::io::{self, Write};
 use std::process::Command;
 

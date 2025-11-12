@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright © 2021 Michael Kefeder
+// SPDX-FileCopyrightText: © 2021 Michael Kefeder
 //! YouTube API connection and helper functions
 
 mod oauth_flow;
@@ -12,7 +12,11 @@ use std::rc::Rc;
 
 /// Create a new HTTPS client.
 fn https_client() -> common::TlsClient {
-    let conn = hyper_rustls::HttpsConnector::with_native_roots();
+    let conn = hyper_rustls::HttpsConnectorBuilder::new()
+        .with_native_roots()
+        .https_or_http()
+        .enable_http2()
+        .build();
     hyper::Client::builder().build(conn)
 }
 

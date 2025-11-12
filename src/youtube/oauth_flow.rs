@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright © 2021 Michael Kefeder
+// SPDX-FileCopyrightText: © 2021 Michael Kefeder
 //! Here we open the browser for the user, making the use of InstalledAppFlow more convenient as
 //! nothing has to be copy/pasted. Reason, the browser will open, the user accepts the requested
 //! scope by clicking through e.g. the google oauth2, after this is done a local webserver started
