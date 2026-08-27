@@ -91,13 +91,23 @@ async fn main() -> anyhow::Result<()> {
                 }
                 std::process::exit(1);
             }
+            if let Some(ref video_id) = options.video_id {
+                let cl = youtube::new_hub().await;
+                let video = vec![youtube::list::YtVideoInfo::from_id(&cl, video_id).await?];
+                if options.json {
+                    youtube::list::print_json(&video)?;
+                } else {
+                    youtube::list::print_table(&video);
+                }
+                std::process::exit(1);
+            }
         }
         Command::Update(options) => {
             let cl = youtube::new_hub().await;
             let vids = if options.video_id == "uploaded" {
-                youtube::uploaded_video_list(&cl).await?
+                youtube::list::list_uploads(&cl, None).await?
             } else {
-                vec![youtube::YtVid::from_id(&cl, &options.video_id).await?]
+                vec![youtube::list::YtVideoInfo::from_id(&cl, &options.video_id).await?]
             };
             if let Some(new_thumb) = options.generate_thumbnail {
                 let entries = std::fs::read_dir(&new_thumb)?

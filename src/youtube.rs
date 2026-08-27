@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: © 2021 Michael Kefeder
 //! YouTube API connection and helper functions
 //!
-//! Built on the official `google-youtube3` API client (google-apis-rs).
+//! Built on the official `google-youtube3` API client ([`google-apis-rs`](https://github.com/google-apis-rs/)).
 
 pub mod list;
 mod oauth_flow;
@@ -210,119 +210,6 @@ pub(crate) async fn change_description(
         println!("resp {:?}", resp);
     }
     Ok(())
-}
-
-/// Old way of fetching existing videos
-#[deprecated(since = "0.4.0", note = "Uses too many requests")]
-pub async fn uploaded_video_list(cl: &Hub) -> anyhow::Result<Vec<YtVid>> {
-    let part = vec!["contentDetails".to_string()];
-    let resp = cl
-        .channels()
-        .list(&part)
-        .mine(true)
-        .add_scopes(SCOPES)
-        .doit()
-        .await
-        .expect("listing your yt failed!");
-    // We get the id of the first channels uploads playlist, pseudocode:
-    // `resp.items[0].content_details.related_playlists.uploads`
-    if let Some(channel) = resp
-        .1
-        .items
-        .and_then(|channels| channels.into_iter().next())
-    {
-        let channel_id = channel
-            .content_details
-            .unwrap()
-            .related_playlists
-            .unwrap()
-            .uploads
-            .unwrap();
-        println!("{:#?}", channel_id);
-        let cl = new_hub().await;
-        return list_playlist(&cl, &channel_id).await;
-    }
-    Ok(vec![])
-}
-
-/// YouTube Video minimal information
-pub struct YtVid {
-    pub id: String,
-    pub title: String,
-    pub description: String,
-}
-
-impl YtVid {
-    #[deprecated(since = "0.4.0", note = "Uses too many requests")]
-    pub async fn from_id(cl: &Hub, video_id: &str) -> anyhow::Result<YtVid> {
-        let part = vec!["snippet".to_string()];
-        let resp = cl
-            .videos()
-            .list(&part)
-            .add_id(video_id)
-            .add_scopes(SCOPES)
-            .doit()
-            .await?;
-        if let Some(video) = resp.1.items.as_ref().unwrap().iter().take(1).next() {
-            let vsnip = video.snippet.as_ref().unwrap().clone();
-            Ok(Self {
-                id: video_id.to_string(),
-                title: vsnip.title.unwrap(),
-                description: vsnip.description.unwrap(),
-            })
-        } else {
-            Ok(Self {
-                id: video_id.to_string(),
-                title: "".to_string(),
-                description: "".to_string(),
-            })
-        }
-    }
-}
-
-/// list all Video in playlist
-/// this will loop and fetch 10 items from the list until complete
-/// returns a list of youtube videos
-#[deprecated(since = "0.4.0", note = "Uses too many requests")]
-pub(crate) async fn list_playlist(cl: &Hub, playlist_id: &str) -> anyhow::Result<Vec<YtVid>> {
-    let part = vec!["snippet".to_string()];
-    let mut page_token: Option<String> = None;
-    let mut all_videos = vec![];
-    loop {
-        let mut call = cl
-            .playlist_items()
-            .list(&part)
-            .playlist_id(playlist_id)
-            .max_results(10) // max is 50
-            .add_scopes(SCOPES);
-        if let Some(token) = &page_token {
-            call = call.page_token(token);
-        }
-        let resp = call.doit().await?;
-        if let Some(videos) = resp.1.items {
-            for f in videos {
-                let (video_id, title, description) = f
-                    .snippet
-                    .map(|s| {
-                        let t = s.title.unwrap_or_else(|| "n.a.".to_string());
-                        let d = s.description.unwrap_or_else(|| "n.a.".to_string());
-                        (s.resource_id.unwrap().video_id.unwrap(), t, d)
-                    })
-                    .unwrap();
-                println!("{} => title: '{}'", video_id, title);
-                all_videos.push(YtVid {
-                    id: video_id.clone(),
-                    title: title.clone(),
-                    description: description.clone(),
-                });
-            }
-        }
-        match resp.1.next_page_token {
-            Some(token) => page_token = Some(token),
-            None => break,
-        }
-    }
-    Ok(all_videos)
 }
 
 #[cfg(test)]

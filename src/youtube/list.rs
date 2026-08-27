@@ -12,14 +12,52 @@ const PAGE_SIZE: u32 = 50;
 /// Maximum number of ids the videos endpoint accepts in one call.
 const ID_BATCH: usize = 50;
 
+/// Minimal YouTube video information
 #[derive(Serialize)]
-pub struct Upload {
+pub struct YtVideoInfo {
     pub id: String,
     pub title: String,
     pub published_at: Option<DateTime<Utc>>,
     pub privacy_status: Option<String>,
     pub url: String,
     pub duration: Option<String>,
+    pub description: Option<String>,
+}
+
+impl YtVideoInfo {
+    /// Attention: do not use that in a loop, API call quota is limited
+    pub async fn from_id(cl: &super::Hub, video_id: &str) -> anyhow::Result<Self> {
+        let part = vec!["snippet".into(), "contentDetails".into(), "status".into()];
+        let resp = cl
+            .videos()
+            .list(&part)
+            .add_id(video_id)
+            .add_scopes(super::SCOPES)
+            .doit()
+            .await?;
+        if let Some(video) = resp.1.items.as_ref().unwrap().iter().take(1).next() {
+            let privacy_status = video
+                .status
+                .as_ref()
+                .and_then(|status| status.privacy_status.clone());
+            let vsnip = video.snippet.as_ref().unwrap().clone();
+            let duration = video
+                .content_details
+                .as_ref()
+                .and_then(|details| details.duration.clone());
+            Ok(Self {
+                id: video_id.to_string(),
+                title: vsnip.title.unwrap(),
+                description: vsnip.description,
+                published_at: vsnip.published_at,
+                privacy_status,
+                url: format!("https://www.youtube.com/watch?v={video_id}"),
+                duration,
+            })
+        } else {
+            anyhow::bail!("video not found")
+        }
+    }
 }
 
 /// Resolve the "uploads" playlist of the authenticated user's channel.
@@ -48,7 +86,10 @@ async fn uploads_playlist_id(hub: &super::Hub) -> anyhow::Result<String> {
 }
 
 /// List the account's uploaded videos, newest first, at most `limit` of them.
-pub async fn list_uploads(hub: &super::Hub, limit: Option<usize>) -> anyhow::Result<Vec<Upload>> {
+pub async fn list_uploads(
+    hub: &super::Hub,
+    limit: Option<usize>,
+) -> anyhow::Result<Vec<YtVideoInfo>> {
     if limit == Some(0) {
         return Ok(Vec::new());
     }
@@ -92,12 +133,13 @@ pub async fn list_uploads(hub: &super::Hub, limit: Option<usize>) -> anyhow::Res
                 continue;
             };
 
-            uploads.push(Upload {
+            uploads.push(YtVideoInfo {
                 url: format!("https://www.youtube.com/watch?v={id}"),
                 id,
                 title: snippet.title.unwrap_or_default(),
                 published_at: content_details.video_published_at.or(snippet.published_at),
-                duration: None,
+                duration: None, // will be updated by fetch_durations
+                description: snippet.description,
                 privacy_status: item.status.and_then(|status| status.privacy_status),
             });
         }
@@ -216,7 +258,7 @@ fn sum_segment(segment: &str, seconds_per_unit: impl Fn(char) -> Option<u64>) ->
     (!pending).then_some(total)
 }
 
-pub fn print_table(uploads: &[Upload]) {
+pub fn print_table(uploads: &[YtVideoInfo]) {
     if uploads.is_empty() {
         println!("No uploaded videos found.");
         return;
@@ -248,8 +290,8 @@ pub fn print_table(uploads: &[Upload]) {
         .max("DURATION".len());
 
     println!(
-        "{:<10}  {:<11}  {:<privacy_width$}  {:>duration_width$}  TITLE",
-        "PUBLISHED", "VIDEO ID", "PRIVACY", "DURATION"
+        "{:<10}  {:<11}  {:<privacy_width$}  {:>duration_width$}  {:>8}  TITLE",
+        "PUBLISHED", "VIDEO ID", "PRIVACY", "DURATION", "HAS-DESC"
     );
     for (upload, duration) in uploads.iter().zip(&durations) {
         let published = upload
@@ -258,13 +300,15 @@ pub fn print_table(uploads: &[Upload]) {
             .unwrap_or_else(|| "-".to_string());
         let privacy = upload.privacy_status.as_deref().unwrap_or("-");
         println!(
-            "{published:<10}  {:<11}  {privacy:<privacy_width$}  {duration:>duration_width$}  {}",
-            upload.id, upload.title
+            "{published:<10}  {:<11}  {privacy:<privacy_width$}  {duration:>duration_width$}  {:>8}  {}",
+            upload.id,
+            upload.description.is_some(),
+            upload.title
         );
     }
 }
 
-pub fn print_json(uploads: &[Upload]) -> anyhow::Result<()> {
+pub fn print_json(uploads: &[YtVideoInfo]) -> anyhow::Result<()> {
     let json = serde_json::to_string_pretty(uploads).context("serializing uploads to JSON")?;
     println!("{json}");
     Ok(())

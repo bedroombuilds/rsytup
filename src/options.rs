@@ -12,7 +12,7 @@ use crate::date_compute;
 pub enum PublishDate {
     /// Current date at 0 o'clock, publishes therefore as soon as possible
     Asap,
-    /// Compute date of coming weekday, e.g. friday computes the date of next friday
+    /// Compute date of coming weekday, e.g. Friday computes the date of next Friday
     Coming(String),
     /// Add weeks from episode number found in title / given as argument, see first_episode_date
     WeeksFromEpisode,
@@ -169,6 +169,9 @@ pub(crate) struct ListOptions {
     /// List your uploaded videos
     #[clap(long)]
     pub uploaded: bool,
+    /// Details about one video-id
+    #[clap(long)]
+    pub video_id: Option<String>,
     /// Shows a list of available methods to compute publish date
     #[clap(long)]
     pub publish_methods: bool,
