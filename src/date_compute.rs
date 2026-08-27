@@ -8,12 +8,13 @@ pub fn parse_iso_date(d: &str) -> Result<NaiveDate, chrono::ParseError> {
     NaiveDate::parse_from_str(d, "%Y-%m-%d")
 }
 
-/// NaiveDateTime from ISO 8601 string, time optional
+/// NaiveDateTime from ISO 8601 string, time optional, `T` or space date-time separator
 pub fn parse_iso_datetime(d: &str) -> Result<NaiveDateTime, chrono::ParseError> {
     let mut d = d.to_string();
     if d.len() == 10 {
         d.push_str(" 00:00:00");
     }
+    let d = d.replace('T', " ");
     NaiveDateTime::parse_from_str(&d, "%Y-%m-%d %H:%M:%S")
 }
 
@@ -60,6 +61,13 @@ mod tests {
     fn test_parse_wo_time() {
         let thu1 = parse_iso_datetime("2021-09-02").unwrap();
         let thu2 = parse_iso_datetime("2021-09-02 00:00:00").unwrap();
+        assert_eq!(thu1, thu2);
+    }
+
+    #[test]
+    fn test_parse_with_t_separator() {
+        let thu1 = parse_iso_datetime("2021-09-02T08:00:00").unwrap();
+        let thu2 = parse_iso_datetime("2021-09-02 08:00:00").unwrap();
         assert_eq!(thu1, thu2);
     }
 }

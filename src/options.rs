@@ -256,8 +256,8 @@ impl UploadOptions {
     /// if episode_nr is given use it, otherwise
     /// try to convert first two chars in title from hex to u8
     pub fn episode_nr(&self) -> anyhow::Result<u8> {
-        if self.episode_nr.is_some() {
-            Ok(self.episode_nr.unwrap())
+        if let Some(episode_nr) = self.episode_nr {
+            Ok(episode_nr)
         } else {
             let number = self.title().chars().take(2).collect::<String>();
             std::primitive::u8::from_str_radix(&number, 16)

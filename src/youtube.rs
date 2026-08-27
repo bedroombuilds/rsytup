@@ -1,110 +1,83 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: © 2021 Michael Kefeder
 //! YouTube API connection and helper functions
+//!
+//! Built on the official `google-youtube3` api client (google-apis-rs).
 
 mod oauth_flow;
-mod youtube_v3_types;
-use youtube_v3_types as yt;
 
 use crate::options::{ChangeMode, UploadOptions};
-use async_google_apis_common as common;
-use std::rc::Rc;
+use google_youtube3::api;
+use google_youtube3::{hyper_rustls, hyper_util, yup_oauth2};
+use std::path::Path;
+use std::str::FromStr;
 
-/// Create a new HTTPS client.
-fn https_client() -> common::TlsClient {
-    let conn = hyper_rustls::HttpsConnectorBuilder::new()
+/// Official youtube api v3 hub, talking https via a rustls connector
+pub type Hub = google_youtube3::YouTube<
+    hyper_rustls::HttpsConnector<hyper_util::client::legacy::connect::HttpConnector>,
+>;
+
+/// the scopes requested for all youtube api calls
+const SCOPES: [api::Scope; 2] = [api::Scope::Upload, api::Scope::ForceSsl];
+
+/// Create a new https client and oauth authenticator and build the api hub
+pub async fn new_hub() -> Hub {
+    let connector = hyper_rustls::HttpsConnectorBuilder::new()
         .with_native_roots()
+        .unwrap()
         .https_or_http()
         .enable_http2()
         .build();
-    hyper::Client::builder().build(conn)
-}
-
-async fn service_basics() -> (
-    hyper::Client<hyper_rustls::HttpsConnector<hyper::client::HttpConnector>>,
-    common::yup_oauth2::authenticator::Authenticator<
-        hyper_rustls::HttpsConnector<hyper::client::HttpConnector>,
-    >,
-) {
-    let https = https_client();
+    let client = hyper_util::client::legacy::Client::builder(hyper_util::rt::TokioExecutor::new())
+        .build(connector.clone());
     // Put your client secret in the working directory!
-    let sec = common::yup_oauth2::read_application_secret("client_secret.json")
+    let sec = yup_oauth2::read_application_secret("client_secret.json")
         .await
         .expect("client secret couldn't be read.");
-    let auth = common::yup_oauth2::InstalledFlowAuthenticator::builder(
+    let auth = yup_oauth2::InstalledFlowAuthenticator::with_client(
         sec,
-        common::yup_oauth2::InstalledFlowReturnMethod::HTTPRedirect,
+        yup_oauth2::InstalledFlowReturnMethod::HTTPRedirect,
+        yup_oauth2::client::CustomHyperClientBuilder::from(
+            hyper_util::client::legacy::Client::builder(hyper_util::rt::TokioExecutor::new())
+                .build(connector),
+        ),
     )
     .persist_tokens_to_disk("tokencache.json")
     // use our custom flow delegate instead of default
     .flow_delegate(Box::new(oauth_flow::InstalledFlowBrowserDelegate))
-    .hyper_client(https.clone())
     .build()
     .await
     .expect("InstalledFlowAuthenticator failed to build");
 
-    (https, auth)
+    google_youtube3::YouTube::new(client, auth)
 }
 
-pub(crate) async fn video_service() -> yt::VideosService {
-    let (https, auth) = service_basics().await;
-    let scopes = vec![
-        yt::YoutubeScopes::YoutubeUpload,
-        yt::YoutubeScopes::YoutubeForceSsl,
+/// parse a publish datetime string into an UTC DateTime
+fn parse_publish_datetime(s: &str) -> anyhow::Result<chrono::DateTime<chrono::Utc>> {
+    for fmt in ["%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%d %H:%M:%SZ"] {
+        if let Ok(naive) = chrono::NaiveDateTime::parse_from_str(s, fmt) {
+            return Ok(naive.and_utc());
+        }
+    }
+    anyhow::bail!("invalid publish datetime: {s}");
+}
+
+/// List most popular videos of the whole of youtube
+pub(crate) async fn video_list(cl: &Hub) {
+    let part = vec![
+        "id".to_string(),
+        "contentDetails".to_string(),
+        "snippet".to_string(),
     ];
-    let mut cl = yt::VideosService::new(https, Rc::new(auth));
-    cl.set_scopes(&scopes);
-    cl
-}
-
-pub async fn thumbnail_service() -> yt::ThumbnailsService {
-    let (https, auth) = service_basics().await;
-    let scopes = vec![
-        yt::YoutubeScopes::YoutubeUpload,
-        yt::YoutubeScopes::YoutubeForceSsl,
-    ];
-    let mut cl = yt::ThumbnailsService::new(https, Rc::new(auth));
-    cl.set_scopes(&scopes);
-    cl
-}
-
-pub async fn playlist_service() -> yt::PlaylistItemsService {
-    let (https, auth) = service_basics().await;
-    let scopes = vec![
-        yt::YoutubeScopes::YoutubeUpload,
-        yt::YoutubeScopes::YoutubeForceSsl,
-    ];
-    let mut cl = yt::PlaylistItemsService::new(https, Rc::new(auth));
-    cl.set_scopes(&scopes);
-    cl
-}
-
-pub async fn channels_service() -> yt::ChannelsService {
-    let (https, auth) = service_basics().await;
-    let scopes = vec![
-        yt::YoutubeScopes::YoutubeUpload,
-        yt::YoutubeScopes::YoutubeForceSsl,
-    ];
-    let mut cl = yt::ChannelsService::new(https, Rc::new(auth));
-    cl.set_scopes(&scopes);
-    cl
-}
-
-pub(crate) async fn video_list(cl: &mut yt::VideosService) {
-    // By default, list most popular videos
-    let general_params = yt::YoutubeParams {
-        fields: Some("*".to_string()),
-        ..Default::default()
-    };
-    let p = yt::VideosListParams {
-        youtube_params: Some(general_params),
-        part: "id,contentDetails,snippet".into(),
-        chart: Some("mostPopular".to_string()),
-        ..Default::default()
-    };
-
-    let resp = cl.list(&p).await.expect("listing your yt failed!");
-    if let Some(videos) = resp.items {
+    let resp = cl
+        .videos()
+        .list(&part)
+        .add_scopes(SCOPES)
+        .chart("mostPopular")
+        .doit()
+        .await
+        .expect("listing your yt failed!");
+    if let Some(videos) = resp.1.items {
         for f in videos {
             println!(
                 "{} => duration: {} title: '{}'",
@@ -121,15 +94,8 @@ pub(crate) async fn video_list(cl: &mut yt::VideosService) {
 }
 
 /// Upload a local file to your YouTube channel.
-pub(crate) async fn upload_file(
-    cl: &mut yt::VideosService,
-    options: &UploadOptions,
-) -> anyhow::Result<String> {
-    let general_params = yt::YoutubeParams {
-        fields: Some("*".to_string()),
-        ..Default::default()
-    };
-    let vsnip = yt::VideoSnippet {
+pub(crate) async fn upload_file(cl: &Hub, options: &UploadOptions) -> anyhow::Result<String> {
+    let vsnip = api::VideoSnippet {
         title: Some(options.title()),
         description: Some(options.description.clone()),
         tags: Some(options.tags()),
@@ -138,66 +104,56 @@ pub(crate) async fn upload_file(
         default_audio_language: Some("en".to_string()),
         ..Default::default()
     };
-    let vstatus = yt::VideoStatus {
+    let vstatus = api::VideoStatus {
         privacy_status: Some(options.privacy_status.to_string()),
-        publish_at: Some(options.publish_datetime().unwrap()),
+        publish_at: Some(parse_publish_datetime(&options.publish_datetime()?)?),
         self_declared_made_for_kids: Some(false),
         ..Default::default()
     };
-    let video = yt::Video {
+    let video = api::Video {
         snippet: Some(vsnip),
         status: Some(vstatus),
         ..Default::default()
     };
-    let params = yt::VideosInsertParams {
-        youtube_params: Some(general_params.clone()),
-        part: "id,status,snippet".into(),
-        ..Default::default()
-    };
-    let resumable = cl.insert_resumable_upload(&params, &video).await?;
-    let tf = tokio::fs::OpenOptions::new()
-        .read(true)
-        .open(options.file.clone())
+    let file = std::fs::File::open(&options.file)?;
+    let (_, resp) = cl
+        .videos()
+        .insert(video)
+        .add_part("id")
+        .add_scopes(SCOPES)
+        .upload_resumable(file, mime::Mime::from_str("application/octet-stream")?)
         .await?;
-    let resp = resumable.upload_file(tf).await?;
     println!("Video-ID: {:?}, Resp:{:?}", resp.id.as_ref(), resp);
     Ok(String::from(resp.id.as_ref().unwrap()))
 }
 
 /// Upload a Thumbnail for a videofile.
 pub(crate) async fn upload_thumbnail(
-    cl: &mut yt::ThumbnailsService,
+    cl: &Hub,
     video_id: &str,
-    thumbnail: impl AsRef<std::path::Path>,
+    thumbnail: impl AsRef<Path>,
 ) -> anyhow::Result<()> {
-    let params = yt::ThumbnailsSetParams {
-        video_id: video_id.into(),
-        ..Default::default()
-    };
-    let resumable = cl.set_resumable_upload(&params).await?;
-    let tf = tokio::fs::OpenOptions::new()
-        .read(true)
-        .open(thumbnail.as_ref())
+    let file = std::fs::File::open(thumbnail.as_ref())?;
+    let (_, resp) = cl
+        .thumbnails()
+        .set(video_id)
+        .add_scopes(SCOPES)
+        .upload_resumable(file, mime::Mime::from_str("application/octet-stream")?)
         .await?;
-    let resp = resumable.upload_file(tf).await?;
     println!("Thumbnail-Resp:{:?}", resp);
     Ok(())
 }
 
 /// add Video to playlist
 pub(crate) async fn add_to_playlist(
-    cl: &mut yt::PlaylistItemsService,
+    cl: &Hub,
     options: &UploadOptions,
     video_id: &str,
 ) -> anyhow::Result<()> {
-    let params = yt::PlaylistItemsInsertParams {
-        part: "snippet".into(),
-        ..Default::default()
-    };
-    let item = yt::PlaylistItem {
-        snippet: Some(yt::PlaylistItemSnippet {
+    let item = api::PlaylistItem {
+        snippet: Some(api::PlaylistItemSnippet {
             playlist_id: Some(options.playlist_id.as_ref().unwrap().into()),
-            resource_id: Some(yt::ResourceId {
+            resource_id: Some(api::ResourceId {
                 kind: Some("youtube#video".to_string()),
                 video_id: Some(video_id.to_string()),
                 ..Default::default()
@@ -206,7 +162,12 @@ pub(crate) async fn add_to_playlist(
         }),
         ..Default::default()
     };
-    let resp = cl.insert(&params, &item).await?;
+    let (_, resp) = cl
+        .playlist_items()
+        .insert(item)
+        .add_scopes(SCOPES)
+        .doit()
+        .await?;
     println!("resp {:?}", resp);
     Ok(())
 }
@@ -217,18 +178,20 @@ pub(crate) async fn add_to_playlist(
 /// snippet.tags info would be reset to default! to update a snippet title and category_id are
 /// mandatory
 pub(crate) async fn change_description(
-    cl: &mut yt::VideosService,
+    cl: &Hub,
     video_id: &str,
     description: &str,
     change_mode: ChangeMode,
 ) -> anyhow::Result<()> {
-    let params = yt::VideosListParams {
-        id: Some(video_id.to_string()),
-        part: "snippet".into(),
-        ..Default::default()
-    };
-    let resp = cl.list(&params).await?;
-    if let Some(video) = resp.items.as_ref().unwrap().iter().take(1).next() {
+    let part = vec!["snippet".to_string()];
+    let resp = cl
+        .videos()
+        .list(&part)
+        .add_id(video_id)
+        .add_scopes(SCOPES)
+        .doit()
+        .await?;
+    if let Some(video) = resp.1.items.as_ref().unwrap().iter().take(1).next() {
         let mut vsnip = video.snippet.as_ref().unwrap().clone();
         let old_desc = vsnip.description.unwrap().clone();
         let new_desc = match change_mode {
@@ -237,43 +200,44 @@ pub(crate) async fn change_description(
             ChangeMode::Prepend => format!("{}{}", description, old_desc.trim_end()),
         };
         vsnip.description = Some(new_desc);
-        let params = yt::VideosUpdateParams {
-            part: "id,snippet".into(),
-            ..Default::default()
-        };
-        let video = yt::Video {
+        let video = api::Video {
             id: Some(video_id.to_string()),
             snippet: Some(vsnip),
             ..Default::default()
         };
-        let resp = cl.update(&params, &video).await?;
+        let (_, resp) = cl.videos().update(video).add_scopes(SCOPES).doit().await?;
         println!("resp {:?}", resp);
     }
     Ok(())
 }
 
-pub async fn uploaded_video_list(cl: &mut yt::ChannelsService) -> anyhow::Result<Vec<YtVid>> {
-    let p = yt::ChannelsListParams {
-        mine: Some(true),
-        part: "contentDetails".into(),
-        ..Default::default()
-    };
-    let resp = cl.list(&p).await.expect("listing your yt failed!");
-    // we get the id fo the first channels playlist, pseudocode:
+pub async fn uploaded_video_list(cl: &Hub) -> anyhow::Result<Vec<YtVid>> {
+    let part = vec!["contentDetails".to_string()];
+    let resp = cl
+        .channels()
+        .list(&part)
+        .mine(true)
+        .add_scopes(SCOPES)
+        .doit()
+        .await
+        .expect("listing your yt failed!");
+    // we get the id of the first channels uploads playlist, pseudocode:
     // resp.items[0].content_details.related_playlists.uploads
-    if let Some(channels) = resp.items {
-        if let Some(channel) = channels.into_iter().take(1).next() {
-            let channel_id = channel
-                .content_details
-                .unwrap()
-                .related_playlists
-                .unwrap()
-                .uploads
-                .unwrap();
-            println!("{:#?}", channel_id);
-            let mut cl = playlist_service().await;
-            return list_playlist(&mut cl, &channel_id).await;
-        }
+    if let Some(channel) = resp
+        .1
+        .items
+        .and_then(|channels| channels.into_iter().next())
+    {
+        let channel_id = channel
+            .content_details
+            .unwrap()
+            .related_playlists
+            .unwrap()
+            .uploads
+            .unwrap();
+        println!("{:#?}", channel_id);
+        let cl = new_hub().await;
+        return list_playlist(&cl, &channel_id).await;
     }
     Ok(vec![])
 }
@@ -286,14 +250,16 @@ pub struct YtVid {
 }
 
 impl YtVid {
-    pub async fn from_id(cl: &mut yt::VideosService, video_id: &str) -> anyhow::Result<YtVid> {
-        let params = yt::VideosListParams {
-            id: Some(video_id.to_string()),
-            part: "snippet".into(),
-            ..Default::default()
-        };
-        let resp = cl.list(&params).await?;
-        if let Some(video) = resp.items.as_ref().unwrap().iter().take(1).next() {
+    pub async fn from_id(cl: &Hub, video_id: &str) -> anyhow::Result<YtVid> {
+        let part = vec!["snippet".to_string()];
+        let resp = cl
+            .videos()
+            .list(&part)
+            .add_id(video_id)
+            .add_scopes(SCOPES)
+            .doit()
+            .await?;
+        if let Some(video) = resp.1.items.as_ref().unwrap().iter().take(1).next() {
             let vsnip = video.snippet.as_ref().unwrap().clone();
             Ok(Self {
                 id: video_id.to_string(),
@@ -313,20 +279,22 @@ impl YtVid {
 /// list all Video in playlist
 /// this will loop and fetch 10 items from the list until complete
 /// returns a list of youtube videos
-pub(crate) async fn list_playlist(
-    cl: &mut yt::PlaylistItemsService,
-    playlist_id: &str,
-) -> anyhow::Result<Vec<YtVid>> {
-    let mut params = yt::PlaylistItemsListParams {
-        part: "snippet".into(),
-        playlist_id: Some(playlist_id.to_string()),
-        max_results: Some(10), // max is 50
-        ..Default::default()
-    };
+pub(crate) async fn list_playlist(cl: &Hub, playlist_id: &str) -> anyhow::Result<Vec<YtVid>> {
+    let part = vec!["snippet".to_string()];
+    let mut page_token: Option<String> = None;
     let mut all_videos = vec![];
     loop {
-        let resp = cl.list(&params).await?;
-        if let Some(videos) = resp.items {
+        let mut call = cl
+            .playlist_items()
+            .list(&part)
+            .playlist_id(playlist_id)
+            .max_results(10) // max is 50
+            .add_scopes(SCOPES);
+        if let Some(token) = &page_token {
+            call = call.page_token(token);
+        }
+        let resp = call.doit().await?;
+        if let Some(videos) = resp.1.items {
             for f in videos {
                 let (video_id, title, description) = f
                     .snippet
@@ -344,10 +312,25 @@ pub(crate) async fn list_playlist(
                 });
             }
         }
-        match resp.next_page_token {
-            Some(token) => params.page_token = Some(token),
+        match resp.1.next_page_token {
+            Some(token) => page_token = Some(token),
             None => break,
         }
     }
     Ok(all_videos)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_publish_datetime() {
+        let d = parse_publish_datetime("2026-09-04T08:00:00Z").unwrap();
+        assert_eq!(d.to_rfc3339(), "2026-09-04T08:00:00+00:00");
+        // space separated variant as produced by NaiveDateTime Debug formatting
+        let d = parse_publish_datetime("2026-09-04 08:00:00Z").unwrap();
+        assert_eq!(d.to_rfc3339(), "2026-09-04T08:00:00+00:00");
+        assert!(parse_publish_datetime("nonsense").is_err());
+    }
 }

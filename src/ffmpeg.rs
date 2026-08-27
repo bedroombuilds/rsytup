@@ -16,7 +16,7 @@ pub fn bg_from_video(
     screenshot_fn.set_extension("png");
     if !screenshot_fn.exists() {
         let output = Command::new(&ffmpeg_bin)
-            .args(&[
+            .args([
                 "-i",
                 &video_fn.to_string_lossy(),
                 "-ss",

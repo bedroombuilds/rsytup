@@ -5,7 +5,7 @@
 //! scope by clicking through e.g. the google oauth2, after this is done a local webserver started
 //! by InstalledFlowAuthenticator will consume the token coming from the oauth2 server = no copy or
 //! paste needed to continue with the operation even when on command-line.
-use async_google_apis_common::yup_oauth2::authenticator_delegate::{
+use google_youtube3::yup_oauth2::authenticator_delegate::{
     DefaultInstalledFlowDelegate, InstalledFlowDelegate,
 };
 use std::future::Future;

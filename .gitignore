@@ -1,2 +1,4 @@
 /target
 assets/*.ttf
+client_secret.json
+tokencache.json

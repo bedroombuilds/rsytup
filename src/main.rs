@@ -31,8 +31,8 @@ async fn main() -> anyhow::Result<()> {
                 }
                 println!("catgegory: {:?}", options.category);
                 println!("thumb-title: {:?}", options.title());
-                println!("youtube-description: {}", &options.description);
-                println!("youtube-tags: {:?}", &options.tags());
+                println!("youtube-description: {}", options.description);
+                println!("youtube-tags: {:?}", options.tags());
                 std::process::exit(0);
             }
             // if no thumbnail given, check if video-filename with .jpg extension exists (=default
@@ -55,23 +55,16 @@ async fn main() -> anyhow::Result<()> {
                 }
                 options.thumbnail = Some(thumb_path);
             }
-            println!("thumbnail-path: {:?}", &options.thumbnail);
-            let mut cl = youtube::video_service().await;
-            let video_id = youtube::upload_file(&mut cl, &options).await?;
-            println!("upload video_id {:?}", &video_id);
+            println!("thumbnail-path: {:?}", options.thumbnail);
+            let cl = youtube::new_hub().await;
+            let video_id = youtube::upload_file(&cl, &options).await?;
+            println!("upload video_id {:?}", video_id);
 
-            if options.thumbnail.is_some() {
-                let mut cl = youtube::thumbnail_service().await;
-                let _ = youtube::upload_thumbnail(
-                    &mut cl,
-                    &video_id,
-                    options.thumbnail.as_ref().unwrap(),
-                )
-                .await;
+            if let Some(ref thumbnail) = options.thumbnail {
+                let _ = youtube::upload_thumbnail(&cl, &video_id, thumbnail).await;
             }
             if options.playlist_id.is_some() {
-                let mut cl = youtube::playlist_service().await;
-                let _ = youtube::add_to_playlist(&mut cl, &options, &video_id).await;
+                let _ = youtube::add_to_playlist(&cl, &options, &video_id).await;
             }
         }
         Command::List(options) => {
@@ -80,8 +73,8 @@ async fn main() -> anyhow::Result<()> {
                 std::process::exit(0);
             }
             if options.yt_top5 {
-                let mut cl = youtube::video_service().await;
-                youtube::video_list(&mut cl).await;
+                let cl = youtube::new_hub().await;
+                youtube::video_list(&cl).await;
                 std::process::exit(1);
             }
             if options.uploaded {
@@ -90,12 +83,11 @@ async fn main() -> anyhow::Result<()> {
             }
         }
         Command::Update(options) => {
-            let mut cl = youtube::video_service().await;
-            let mut chsrv = youtube::channels_service().await;
+            let cl = youtube::new_hub().await;
             let vids = if options.video_id == "uploaded" {
-                youtube::uploaded_video_list(&mut chsrv).await?
+                youtube::uploaded_video_list(&cl).await?
             } else {
-                vec![youtube::YtVid::from_id(&mut cl, &options.video_id).await?]
+                vec![youtube::YtVid::from_id(&cl, &options.video_id).await?]
             };
             if let Some(new_thumb) = options.generate_thumbnail {
                 let entries = std::fs::read_dir(&new_thumb)?
@@ -103,7 +95,7 @@ async fn main() -> anyhow::Result<()> {
                     .collect::<Result<Vec<_>, std::io::Error>>()?;
                 println!("{:#?}", entries);
                 let mov_ext = Some(std::ffi::OsStr::new("mov"));
-                let mut tsrv = youtube::thumbnail_service().await;
+                let thumbnail_cl = youtube::new_hub().await;
                 for v in vids {
                     if let Some((episode_nr, ep_title)) = &v.title.split_once('.') {
                         // text on thumbnail is without episode nr and series info
@@ -121,7 +113,7 @@ async fn main() -> anyhow::Result<()> {
                             })
                             .take(1)
                             .collect();
-                        println!("Video {} {:?}", &episode_nr, &video_fn);
+                        println!("Video {} {:?}", episode_nr, video_fn);
                         let mut thumb_path = PathBuf::from(&video_fn);
                         thumb_path.set_extension("jpg");
                         let screenshot_fn = ffmpeg::bg_from_video(
@@ -135,19 +127,18 @@ async fn main() -> anyhow::Result<()> {
                             &options.thumbnail_watermark,
                             ep_title,
                         );
-                        let _ = youtube::upload_thumbnail(&mut tsrv, &v.id, thumb_path).await;
+                        let _ = youtube::upload_thumbnail(&thumbnail_cl, &v.id, thumb_path).await;
                     }
                 }
             } else if let Some(desc) = options.description {
                 let new_desc = std::fs::read_to_string(&desc)?;
                 for v in vids {
-                    youtube::change_description(&mut cl, &v.id, &new_desc, options.change_desc)
-                        .await?;
+                    youtube::change_description(&cl, &v.id, &new_desc, options.change_desc).await?;
                 }
             } else if let Some(playlist_id) = options.add_to_playlist {
                 eprintln!(
                     "at some point in time this will add a video_id to a playlist: {}",
-                    &playlist_id
+                    playlist_id
                 );
             } else {
                 eprintln!("not implemented");
