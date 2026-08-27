@@ -2,8 +2,9 @@
 // SPDX-FileCopyrightText: © 2021 Michael Kefeder
 //! YouTube API connection and helper functions
 //!
-//! Built on the official `google-youtube3` api client (google-apis-rs).
+//! Built on the official `google-youtube3` API client (google-apis-rs).
 
+pub mod list;
 mod oauth_flow;
 
 use crate::options::{ChangeMode, UploadOptions};
@@ -12,15 +13,15 @@ use google_youtube3::{hyper_rustls, hyper_util, yup_oauth2};
 use std::path::Path;
 use std::str::FromStr;
 
-/// Official youtube api v3 hub, talking https via a rustls connector
+/// Official YouTube API v3 hub, talking HTTPS via a `rustls` connector
 pub type Hub = google_youtube3::YouTube<
     hyper_rustls::HttpsConnector<hyper_util::client::legacy::connect::HttpConnector>,
 >;
 
-/// the scopes requested for all youtube api calls
+/// The scopes requested for all YouTube API calls
 const SCOPES: [api::Scope; 2] = [api::Scope::Upload, api::Scope::ForceSsl];
 
-/// Create a new https client and oauth authenticator and build the api hub
+/// Create a new HTTPS client and OAuth authenticator and build the API hub
 pub async fn new_hub() -> Hub {
     let connector = hyper_rustls::HttpsConnectorBuilder::new()
         .with_native_roots()
@@ -43,7 +44,7 @@ pub async fn new_hub() -> Hub {
         ),
     )
     .persist_tokens_to_disk("tokencache.json")
-    // use our custom flow delegate instead of default
+    // Use our custom flow delegate instead of default
     .flow_delegate(Box::new(oauth_flow::InstalledFlowBrowserDelegate))
     .build()
     .await
@@ -52,7 +53,7 @@ pub async fn new_hub() -> Hub {
     google_youtube3::YouTube::new(client, auth)
 }
 
-/// parse a publish datetime string into an UTC DateTime
+/// Parse a publish datetime string into a UTC Date-Time
 fn parse_publish_datetime(s: &str) -> anyhow::Result<chrono::DateTime<chrono::Utc>> {
     for fmt in ["%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%d %H:%M:%SZ"] {
         if let Ok(naive) = chrono::NaiveDateTime::parse_from_str(s, fmt) {
@@ -62,8 +63,8 @@ fn parse_publish_datetime(s: &str) -> anyhow::Result<chrono::DateTime<chrono::Ut
     anyhow::bail!("invalid publish datetime: {s}");
 }
 
-/// List most popular videos of the whole of youtube
-pub(crate) async fn video_list(cl: &Hub) {
+/// List most popular videos of the whole of YouTube
+pub(crate) async fn video_list_top5(cl: &Hub) {
     let part = vec![
         "id".to_string(),
         "contentDetails".to_string(),
@@ -127,7 +128,7 @@ pub(crate) async fn upload_file(cl: &Hub, options: &UploadOptions) -> anyhow::Re
     Ok(String::from(resp.id.as_ref().unwrap()))
 }
 
-/// Upload a Thumbnail for a videofile.
+/// Upload a Thumbnail for a video-file.
 pub(crate) async fn upload_thumbnail(
     cl: &Hub,
     video_id: &str,
@@ -172,10 +173,10 @@ pub(crate) async fn add_to_playlist(
     Ok(())
 }
 
-/// change videos description text
-/// in order to update only the snippet.description we need to fetch the full video snippet data
+/// Change videos description text.
+/// In order to update only the `snippet.description` we need to fetch the full video snippet data
 /// and replace the description before issuing the update command, otherwise e.g. missing
-/// snippet.tags info would be reset to default! to update a snippet title and category_id are
+/// `snippet.tags` info would be reset to default! To update a snippet title and category_id are
 /// mandatory
 pub(crate) async fn change_description(
     cl: &Hub,
@@ -211,6 +212,8 @@ pub(crate) async fn change_description(
     Ok(())
 }
 
+/// Old way of fetching existing videos
+#[deprecated(since = "0.4.0", note = "Uses too many requests")]
 pub async fn uploaded_video_list(cl: &Hub) -> anyhow::Result<Vec<YtVid>> {
     let part = vec!["contentDetails".to_string()];
     let resp = cl
@@ -221,8 +224,8 @@ pub async fn uploaded_video_list(cl: &Hub) -> anyhow::Result<Vec<YtVid>> {
         .doit()
         .await
         .expect("listing your yt failed!");
-    // we get the id of the first channels uploads playlist, pseudocode:
-    // resp.items[0].content_details.related_playlists.uploads
+    // We get the id of the first channels uploads playlist, pseudocode:
+    // `resp.items[0].content_details.related_playlists.uploads`
     if let Some(channel) = resp
         .1
         .items
@@ -242,7 +245,7 @@ pub async fn uploaded_video_list(cl: &Hub) -> anyhow::Result<Vec<YtVid>> {
     Ok(vec![])
 }
 
-/// Youtube Video minimal information
+/// YouTube Video minimal information
 pub struct YtVid {
     pub id: String,
     pub title: String,
@@ -250,6 +253,7 @@ pub struct YtVid {
 }
 
 impl YtVid {
+    #[deprecated(since = "0.4.0", note = "Uses too many requests")]
     pub async fn from_id(cl: &Hub, video_id: &str) -> anyhow::Result<YtVid> {
         let part = vec!["snippet".to_string()];
         let resp = cl
@@ -279,6 +283,7 @@ impl YtVid {
 /// list all Video in playlist
 /// this will loop and fetch 10 items from the list until complete
 /// returns a list of youtube videos
+#[deprecated(since = "0.4.0", note = "Uses too many requests")]
 pub(crate) async fn list_playlist(cl: &Hub, playlist_id: &str) -> anyhow::Result<Vec<YtVid>> {
     let part = vec!["snippet".to_string()];
     let mut page_token: Option<String> = None;
@@ -328,7 +333,7 @@ mod tests {
     fn test_parse_publish_datetime() {
         let d = parse_publish_datetime("2026-09-04T08:00:00Z").unwrap();
         assert_eq!(d.to_rfc3339(), "2026-09-04T08:00:00+00:00");
-        // space separated variant as produced by NaiveDateTime Debug formatting
+        // Space separated variant as produced by NaiveDateTime Debug formatting
         let d = parse_publish_datetime("2026-09-04 08:00:00Z").unwrap();
         assert_eq!(d.to_rfc3339(), "2026-09-04T08:00:00+00:00");
         assert!(parse_publish_datetime("nonsense").is_err());

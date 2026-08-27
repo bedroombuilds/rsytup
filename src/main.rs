@@ -1,5 +1,5 @@
-//! rsytup - Rust YouTube uploader
-//! a tool to automate common actions when uploading a video to youtube
+//! `rsytup` - Rust YouTube uploader
+//! a tool to automate common actions when uploading a video to YouTube
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: © 2021 Michael Kefeder
 use clap::Parser;
@@ -35,7 +35,7 @@ async fn main() -> anyhow::Result<()> {
                 println!("youtube-tags: {:?}", options.tags());
                 std::process::exit(0);
             }
-            // if no thumbnail given, check if video-filename with .jpg extension exists (=default
+            // If no thumbnail given, check if video-filename with .jpg extension exists (=default
             // thumbnail), if not make one with that filename
             if options.thumbnail.is_none() {
                 let mut thumb_path = PathBuf::from(&options.file);
@@ -74,11 +74,21 @@ async fn main() -> anyhow::Result<()> {
             }
             if options.yt_top5 {
                 let cl = youtube::new_hub().await;
-                youtube::video_list(&cl).await;
+                if options.json {
+                    todo!("adapt according to uploads");
+                } else {
+                    youtube::video_list_top5(&cl).await;
+                }
                 std::process::exit(1);
             }
             if options.uploaded {
-                eprintln!("Not yet implemented");
+                let hub = youtube::new_hub().await;
+                let uploads = youtube::list::list_uploads(&hub, None).await?;
+                if options.json {
+                    youtube::list::print_json(&uploads)?;
+                } else {
+                    youtube::list::print_table(&uploads);
+                }
                 std::process::exit(1);
             }
         }
@@ -98,7 +108,7 @@ async fn main() -> anyhow::Result<()> {
                 let thumbnail_cl = youtube::new_hub().await;
                 for v in vids {
                     if let Some((episode_nr, ep_title)) = &v.title.split_once('.') {
-                        // text on thumbnail is without episode nr and series info
+                        // Text on thumbnail is without episode number and series info
                         let ep_title = match ep_title.split_once('-') {
                             Some((t, _)) => t.trim(),
                             None => ep_title,

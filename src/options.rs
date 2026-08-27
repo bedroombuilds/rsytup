@@ -10,15 +10,15 @@ use crate::date_compute;
 #[derive(Debug, Clone, strum::EnumIter, strum::EnumMessage)]
 #[strum(serialize_all = "kebab_case")]
 pub enum PublishDate {
-    /// current date at 0 o'clock, publishes therefore as soon as possible
+    /// Current date at 0 o'clock, publishes therefore as soon as possible
     Asap,
-    /// compute date of coming weekday, e.g. friday computes the date of next friday
+    /// Compute date of coming weekday, e.g. friday computes the date of next friday
     Coming(String),
-    /// add weeks from episode number found in title / given as argument, see first_episode_date
+    /// Add weeks from episode number found in title / given as argument, see first_episode_date
     WeeksFromEpisode,
-    /// uses given ISO formatted date
+    /// Uses given ISO formatted date
     IsoDate(String),
-    /// uses given ISO formatted date and time
+    /// Uses given ISO formatted date and time
     IsoDateTime(String),
 }
 
@@ -90,8 +90,8 @@ where
 
 #[derive(Debug, clap::Parser)]
 #[clap(
-    name = "Rust Youtube uploader",
-    about = "helps automating youtube uploads"
+    name = "Rust YouTube uploader",
+    about = "helps automating YouTube uploads"
 )]
 pub(crate) struct Options {
     #[clap(subcommand)]
@@ -100,9 +100,9 @@ pub(crate) struct Options {
 
 #[derive(Debug, clap::Parser)]
 pub(crate) enum Command {
-    /// Upload Content to Youtube
+    /// Upload Content to YouTube
     Upload(UploadOptions),
-    /// List Videos from Youtube or your account
+    /// List Videos from YouTube or your account
     List(ListOptions),
     /// Update existing Content
     Update(UpdateOptions),
@@ -110,41 +110,41 @@ pub(crate) enum Command {
 
 #[derive(Debug, clap::Parser)]
 pub(crate) struct UploadOptions {
-    /// filename of video to upload
+    /// Filename of video to upload
     #[clap(short, long)]
     pub file: PathBuf,
-    /// description of youtube video
+    /// Description of YouTube video
     #[clap(short, long)]
     pub description: String,
-    /// title if none given created from filename
+    /// Title if none given created from filename
     #[clap(short, long)]
     pub title: Option<String>,
-    /// thumbnail file to use (otherwise generated from video)
+    /// Thumbnail file to use (otherwise generated from video)
     #[clap(long)]
     pub thumbnail: Option<PathBuf>,
-    /// thumbnail watermark file to use, will be placed ontop of screenshot
+    /// Thumbnail watermark file to use, will be placed on top of screenshot
     #[clap(long, default_value = "logos.png")]
     pub thumbnail_watermark: PathBuf,
-    /// auto-create thumbnail from video at this second
+    /// Auto-create thumbnail from video at this second
     #[clap(long, default_value = "360")]
     pub thumb_second: usize,
-    /// date to publish at, can be computed format <method>=<value>
+    /// Date to publish at, can be computed format <method>=<value>
     /// to see all available methods use `list --publish-methods`
     #[clap(short, long, default_value = "coming=friday", number_of_values = 1)]
     pub publish_at: PublishDate,
-    /// publishing day-time
+    /// Publishing day-time
     #[clap(short = 'T', long, default_value = "08:00:00")]
     pub publish_time: String,
     /// Number of episode (if not in title)
     #[clap(short, long)]
     pub episode_nr: Option<u8>,
-    /// add video to Playlist (if given)
+    /// Add video to Playlist (if given)
     #[clap(long)]
     pub playlist_id: Option<String>,
-    /// comma separated keywords list
-    #[clap(long, default_value = "rust,tutorial,youtube,upload,rsytup")]
+    /// Comma separated keywords list
+    #[clap(long, default_value = "rust,tutorial,YouTube,upload,rsytup")]
     pub keywords: String,
-    /// privacy status
+    /// Privacy status
     #[clap(long, default_value = "private")]
     pub privacy_status: PrivacyStates,
     /// Category
@@ -153,17 +153,17 @@ pub(crate) struct UploadOptions {
     /// Date of First episode
     #[clap(long, default_value = "2020-09-01")]
     pub first_episode_date: String,
-    /// Pretend shows title, date, description and more that would be used and exits
+    /// Pretend shows title, date, description, and more, that would be used and exits
     #[clap(long)]
     pub pretend: bool,
-    /// path to ffmpeg binary
+    /// Path to `ffmpeg` binary
     #[clap(long, default_value = "ffmpeg")]
     pub ffmpeg_bin: PathBuf,
 }
 
 #[derive(Debug, clap::Parser)]
 pub(crate) struct ListOptions {
-    /// List top 5 videos of youtube
+    /// List top 5 videos of YouTube
     #[clap(long)]
     pub yt_top5: bool,
     /// List your uploaded videos
@@ -172,34 +172,37 @@ pub(crate) struct ListOptions {
     /// Shows a list of available methods to compute publish date
     #[clap(long)]
     pub publish_methods: bool,
+    /// Format output as JSON
+    #[clap(long)]
+    pub json: bool,
 }
 
 #[derive(Debug, clap::Parser)]
 pub(crate) struct UpdateOptions {
-    /// video ID, to loop over all videos use "uploaded"
+    /// Video ID, to loop overall videos use "uploaded"
     #[clap(long)]
     pub video_id: String,
     /// (re-)generates thumbnail from path where the videos are stored
     /// for a given video ID. Matches filenames using the episode_nr in the title.
-    /// uploads new thumbnail to youtube
+    /// Uploads new thumbnail to YouTube
     #[clap(long)]
     pub generate_thumbnail: Option<PathBuf>,
-    /// thumbnail watermark file to use, will be placed ontop of screenshot
+    /// Thumbnail watermark file to use, will be placed on top of screenshot
     #[clap(long, default_value = "logos.png")]
     pub thumbnail_watermark: PathBuf,
-    /// the description text of all uploaded Videos
+    /// The description text of all uploaded Videos
     #[clap(long)]
     pub description: Option<PathBuf>,
-    /// the description text of all uploaded Videos
+    /// The description text of all uploaded Videos
     #[clap(long, default_value = "append")]
     pub change_desc: ChangeMode,
-    /// auto-create thumbnail from video at this second
+    /// Auto-create thumbnail from video at this second
     #[clap(long, default_value = "360")]
     pub thumb_second: usize,
-    /// add video to playlist with given id
+    /// Add video to playlist with given id
     #[clap(long)]
     pub add_to_playlist: Option<String>,
-    /// path to ffmpeg binary
+    /// Path to `ffmpeg` binary
     #[clap(long, default_value = "ffmpeg")]
     pub ffmpeg_bin: PathBuf,
 }
@@ -238,7 +241,7 @@ impl UploadOptions {
         }
     }
 
-    /// if title is given use it, otherwise create from filename
+    /// If title is given use it, otherwise create from filename
     pub fn title(&self) -> String {
         if self.title.is_some() {
             self.title.as_deref().unwrap().to_string()
@@ -253,8 +256,8 @@ impl UploadOptions {
         }
     }
 
-    /// if episode_nr is given use it, otherwise
-    /// try to convert first two chars in title from hex to u8
+    /// If episode_nr is given use it, otherwise
+    /// try to convert first two chars in title from hex to `u8`
     pub fn episode_nr(&self) -> anyhow::Result<u8> {
         if let Some(episode_nr) = self.episode_nr {
             Ok(episode_nr)
