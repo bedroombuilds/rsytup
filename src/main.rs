@@ -132,10 +132,20 @@ async fn run() -> Result<(), Exn<AppError>> {
             if options.yt_top5 {
                 let top5_error = || AppError("listing the most popular videos".to_string());
                 let cl = youtube::new_hub().await.or_raise(top5_error)?;
+                let videos = youtube::list::most_popular(&cl)
+                    .await
+                    .or_raise(top5_error)?;
                 if options.json {
-                    todo!("adapt according to uploads");
+                    youtube::list::print_json(&videos);
                 } else {
-                    youtube::video_list_top5(&cl).await.or_raise(top5_error)?;
+                    for video in videos {
+                        println!(
+                            "{} => duration: {} title: '{}'",
+                            video.id,
+                            video.duration.as_deref().unwrap_or("n.a."),
+                            video.title
+                        );
+                    }
                 }
                 return Ok(());
             }
@@ -204,24 +214,28 @@ async fn run() -> Result<(), Exn<AppError>> {
                             Some((t, _)) => t.trim(),
                             None => ep_title,
                         };
-                        let video_fn: PathBuf = entries
-                            .iter()
-                            .filter(|vfn| {
-                                vfn.file_name()
-                                    .map(|x| x.to_str().unwrap().starts_with(episode_nr))
-                                    .unwrap()
-                                    && vfn.extension() == mov_ext
-                            })
-                            .take(1)
-                            .collect();
+                        let Some(video_fn) = entries.iter().find(|vfn| {
+                            vfn.extension() == mov_ext
+                                && vfn
+                                    .file_name()
+                                    .and_then(|name| name.to_str())
+                                    .is_some_and(|name| name.starts_with(episode_nr))
+                        }) else {
+                            eprintln!(
+                                "warning: no .mov file for episode {episode_nr} in {}, skipping video {}",
+                                new_thumb.display(),
+                                v.id
+                            );
+                            continue;
+                        };
                         println!("Video {} {:?}", episode_nr, video_fn);
-                        let mut thumb_path = PathBuf::from(&video_fn);
+                        let mut thumb_path = video_fn.clone();
                         thumb_path.set_extension("jpg");
                         let thumbnail_error =
                             || AppError(format!("generating thumbnail for video {}", v.id));
                         let screenshot_fn = ffmpeg::bg_from_video(
                             &options.ffmpeg_bin,
-                            &video_fn,
+                            video_fn,
                             options.thumb_second,
                         )
                         .or_raise(thumbnail_error)?;

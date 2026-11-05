@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use chrono::{DateTime, Utc};
 use exn::{OptionExt, Result, bail};
 use futures_util::future;
+use google_youtube3::api;
 use serde::Serialize;
 
 use super::{ApiResultExt, YoutubeError};
@@ -43,22 +44,48 @@ impl YtVideoInfo {
                 "fetching video {video_id}"
             )));
         };
-        let unexpected = || {
-            YoutubeError::unexpected(format!(
-                "video {video_id} was returned without a snippet title"
-            ))
-        };
-        let vsnip = video.snippet.ok_or_raise(unexpected)?;
+        Self::from_video(video)
+    }
+
+    /// Convert a video resource as returned by `videos.list`.
+    fn from_video(video: api::Video) -> Result<Self, YoutubeError> {
+        let id = video
+            .id
+            .ok_or_raise(|| YoutubeError::unexpected("a video was returned without an id"))?;
+        let snippet = video.snippet.unwrap_or_default();
+        let title = snippet.title.ok_or_raise(|| {
+            YoutubeError::unexpected(format!("video {id} was returned without a snippet title"))
+        })?;
         Ok(Self {
-            id: video_id.to_string(),
-            title: vsnip.title.ok_or_raise(unexpected)?,
-            description: vsnip.description,
-            published_at: vsnip.published_at,
+            url: format!("https://www.youtube.com/watch?v={id}"),
+            id,
+            title,
+            description: snippet.description,
+            published_at: snippet.published_at,
             privacy_status: video.status.and_then(|status| status.privacy_status),
-            url: format!("https://www.youtube.com/watch?v={video_id}"),
             duration: video.content_details.and_then(|details| details.duration),
         })
     }
+}
+
+/// List the currently most popular videos of the whole of YouTube; the API
+/// returns 5 of them by default.
+pub async fn most_popular(hub: &super::Hub) -> Result<Vec<YtVideoInfo>, YoutubeError> {
+    let part = vec!["snippet".into(), "contentDetails".into(), "status".into()];
+    let (_, response) = hub
+        .videos()
+        .list(&part)
+        .chart("mostPopular")
+        .add_scopes(super::SCOPES)
+        .doit()
+        .await
+        .or_raise_api(|| "listing the most popular videos")?;
+    response
+        .items
+        .unwrap_or_default()
+        .into_iter()
+        .map(YtVideoInfo::from_video)
+        .collect()
 }
 
 /// Resolve the "uploads" playlist of the authenticated user's channel.
@@ -329,4 +356,40 @@ pub fn print_json(uploads: &[YtVideoInfo]) {
     // `Serialize` impl, neither of which `YtVideoInfo` has.
     let json = serde_json::to_string_pretty(uploads).expect("YtVideoInfo always serializes");
     println!("{json}");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::youtube::YoutubeErrorKind;
+
+    fn video(title: Option<&str>) -> api::Video {
+        api::Video {
+            id: Some("abc".to_string()),
+            snippet: Some(api::VideoSnippet {
+                title: title.map(String::from),
+                ..Default::default()
+            }),
+            content_details: Some(api::VideoContentDetails {
+                duration: Some("PT1M2S".to_string()),
+                ..Default::default()
+            }),
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn test_from_video() {
+        let info = YtVideoInfo::from_video(video(Some("Hello"))).unwrap();
+        assert_eq!(info.id, "abc");
+        assert_eq!(info.title, "Hello");
+        assert_eq!(info.url, "https://www.youtube.com/watch?v=abc");
+        assert_eq!(info.duration.as_deref(), Some("PT1M2S"));
+    }
+
+    #[test]
+    fn test_from_video_without_title() {
+        let err = YtVideoInfo::from_video(video(None)).err().unwrap();
+        assert_eq!(err.kind(), YoutubeErrorKind::UnexpectedResponse);
+    }
 }

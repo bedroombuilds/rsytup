@@ -78,8 +78,10 @@ where
         draw_text_mut(
             image,
             color,
-            ((image.width() - glyphs_width) / 2).try_into().unwrap(),
-            y_offset.try_into().unwrap(),
+            ((image.width() - glyphs_width) / 2)
+                .try_into()
+                .expect("image dimensions fit in i32"),
+            y_offset.try_into().expect("image dimensions fit in i32"),
             font_size,
             &font,
             text,

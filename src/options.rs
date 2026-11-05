@@ -43,6 +43,13 @@ pub enum OptionsError {
         source: chrono::ParseError,
     },
 
+    /// `--file` has no file name (e.g. `..` or `/`) to derive a title from.
+    #[error("`{}` has no file name to derive a title from", file.display())]
+    NoFileName {
+        /// The offending path.
+        file: PathBuf,
+    },
+
     /// The first two characters of the title are not a hex number.
     #[error("first two digits of title `{title}` should be hex-number.")]
     EpisodeNrNotHex {
@@ -117,7 +124,8 @@ pub fn print_publish_date_enum() {
         println!(
             "{:?} {}",
             m.get_serializations(),
-            m.get_documentation().unwrap()
+            m.get_documentation()
+                .expect("every PublishDate variant has a doc comment")
         );
     }
 }
@@ -150,10 +158,19 @@ pub(crate) enum Command {
     Update(UpdateOptions),
 }
 
+/// Parse `--file`, which needs a file name to derive the default title from.
+fn parse_video_file(s: &str) -> Result<PathBuf, OptionsError> {
+    let file = PathBuf::from(s);
+    if file.file_stem().is_none() {
+        return Err(OptionsError::NoFileName { file });
+    }
+    Ok(file)
+}
+
 #[derive(Debug, clap::Parser)]
 pub(crate) struct UploadOptions {
     /// Filename of video to upload
-    #[clap(short, long)]
+    #[clap(short, long, value_parser = parse_video_file)]
     pub file: PathBuf,
     /// Description of YouTube video
     #[clap(short, long)]
@@ -307,16 +324,14 @@ impl UploadOptions {
 
     /// If title is given use it, otherwise create from filename
     pub fn title(&self) -> String {
-        if self.title.is_some() {
-            self.title.as_deref().unwrap().to_string()
-        } else {
-            self.file
-                .clone()
+        match &self.title {
+            Some(title) => title.clone(),
+            None => self
+                .file
                 .file_stem()
-                .unwrap()
-                .to_str()
-                .unwrap()
-                .to_string()
+                .expect("--file is validated by parse_video_file to have a file name")
+                .to_string_lossy()
+                .into_owned(),
         }
     }
 
@@ -346,6 +361,23 @@ mod tests {
         assert!(err.contains("`bogus`"), "{err}");
         assert!(err.contains("asap"), "{err}");
         assert!(err.contains("iso-date-time"), "{err}");
+    }
+
+    #[test]
+    fn test_every_publish_method_is_documented() {
+        for m in PublishDate::iter() {
+            assert!(m.get_documentation().is_some(), "{m:?} has no doc comment");
+        }
+    }
+
+    #[test]
+    fn test_parse_video_file() {
+        assert!(parse_video_file("..").is_err());
+        assert!(parse_video_file("/").is_err());
+        assert_eq!(
+            parse_video_file("01.intro.mov").unwrap(),
+            PathBuf::from("01.intro.mov")
+        );
     }
 
     #[test]

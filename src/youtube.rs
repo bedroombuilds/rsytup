@@ -240,38 +240,6 @@ fn parse_publish_datetime(s: &str) -> Result<chrono::DateTime<chrono::Utc>, Yout
     )))
 }
 
-/// List most popular videos of the whole of YouTube
-pub(crate) async fn video_list_top5(cl: &Hub) -> Result<(), YoutubeError> {
-    let part = vec![
-        "id".to_string(),
-        "contentDetails".to_string(),
-        "snippet".to_string(),
-    ];
-    let resp = cl
-        .videos()
-        .list(&part)
-        .add_scopes(SCOPES)
-        .chart("mostPopular")
-        .doit()
-        .await
-        .or_raise_api(|| "listing the most popular videos")?;
-    if let Some(videos) = resp.1.items {
-        for f in videos {
-            println!(
-                "{} => duration: {} title: '{}'",
-                f.id.as_deref().unwrap_or("n.a."),
-                f.content_details
-                    .and_then(|cd| cd.duration)
-                    .unwrap_or_else(|| "n.a.".to_string()),
-                f.snippet
-                    .and_then(|s| s.title)
-                    .unwrap_or_else(|| "n.a.".to_string())
-            );
-        }
-    }
-    Ok(())
-}
-
 /// Upload a local file to your YouTube channel.
 pub(crate) async fn upload_file(cl: &Hub, options: &UploadOptions) -> Result<String, YoutubeError> {
     let video_fn = options.file.display();
