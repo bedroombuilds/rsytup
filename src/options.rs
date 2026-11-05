@@ -1,12 +1,56 @@
 //! Command line options and configuration settings for rsytup
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: © 2021 Michael Kefeder
-use std::error::Error;
 use std::path::PathBuf;
+
+use thiserror::Error;
 
 use strum::{EnumMessage, IntoEnumIterator};
 
 use crate::date_compute;
+
+/// What went wrong while interpreting `rsytup`'s command line options.
+///
+/// Each variant carries the context a human needs to fix the offending option
+/// or value. These are all "fix the input" errors; nothing is retryable.
+#[derive(Debug, Error)]
+pub enum OptionsError {
+    /// The `publish-at` method is not one of the known `PublishDate` variants.
+    #[error(
+        "unknown publish method `{method}`, expected one of: {}",
+        publish_methods()
+    )]
+    UnknownPublishMethod {
+        /// The offending method name, without its `=VALUE` part.
+        method: String,
+    },
+
+    /// A weekday name (e.g. in `coming=friday`) is not a valid `Weekday`.
+    #[error("could not parse weekday `{weekday}`: {source}")]
+    ParseWeekday {
+        /// The offending weekday name.
+        weekday: String,
+        /// The underlying parse error from `FromStr`.
+        source: chrono::ParseWeekdayError,
+    },
+
+    /// A date / date-time in `iso-date` or `iso-date-time` is not ISO 8601.
+    #[error("could not parse date `{date}`: {source}")]
+    ParseDate {
+        /// The offending date / date-time value.
+        date: String,
+        /// The underlying date parse error.
+        source: chrono::ParseError,
+    },
+
+    /// The first two characters of the title are not a hex number.
+    #[error("first two digits of title `{title}` should be hex-number.")]
+    EpisodeNrNotHex {
+        /// The title the episode number was derived from.
+        title: String,
+    },
+}
+
 #[derive(Debug, Clone, strum::EnumIter, strum::EnumMessage)]
 #[strum(serialize_all = "kebab_case")]
 pub enum PublishDate {
@@ -23,17 +67,21 @@ pub enum PublishDate {
 }
 
 impl std::str::FromStr for PublishDate {
-    type Err = anyhow::Error;
+    type Err = OptionsError;
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (k, v) = parse_key_val::<String, String>(s)?;
-        match k.as_str() {
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        // `KEY=VALUE`; if `=` is missing VALUE is assumed to be empty
+        let (k, v) = s.split_once('=').unwrap_or((s, ""));
+        let v = v.to_string();
+        match k {
             "asap" => Ok(PublishDate::Asap),
             "coming" => Ok(PublishDate::Coming(v)),
             "weeks-from-episode" => Ok(PublishDate::WeeksFromEpisode),
             "iso-date" => Ok(PublishDate::IsoDate(v)),
             "iso-date-time" => Ok(PublishDate::IsoDateTime(v)),
-            _ => anyhow::bail!("variant not found"),
+            _ => Err(OptionsError::UnknownPublishMethod {
+                method: k.to_string(),
+            }),
         }
     }
 }
@@ -55,6 +103,15 @@ pub enum PrivacyStates {
     Unlisted,
 }
 
+/// The valid `publish-at` method names, comma separated.
+fn publish_methods() -> String {
+    PublishDate::iter()
+        .flat_map(|m| m.get_serializations())
+        .copied()
+        .collect::<Vec<_>>()
+        .join(", ")
+}
+
 pub fn print_publish_date_enum() {
     for m in PublishDate::iter() {
         println!(
@@ -71,21 +128,6 @@ pub enum Categories {
     Science = 28,
     People = 22,
     Comedy = 23,
-}
-
-/// Parse a single key-value pair from `KEY=VALUE` format
-/// if `=` is missing VALUE is assumed to be empty string
-fn parse_key_val<T, U>(s: &str) -> anyhow::Result<(T, U)>
-where
-    T: std::str::FromStr,
-    T::Err: Error + 'static + Send + Sync,
-    U: std::str::FromStr,
-    U::Err: Error + 'static + Send + Sync,
-{
-    match s.find('=') {
-        Some(pos) => Ok((s[..pos].parse()?, s[pos + 1..].parse()?)),
-        None => Ok((s.parse()?, "".parse()?)),
-    }
 }
 
 #[derive(Debug, clap::Parser)]
@@ -215,33 +257,52 @@ impl UploadOptions {
         self.keywords.split(',').map(String::from).collect()
     }
 
-    pub fn publish_datetime(&self) -> anyhow::Result<String> {
+    pub fn publish_datetime(&self) -> Result<String, OptionsError> {
         let today = chrono::offset::Local::now().naive_local().date();
         match &self.publish_at {
             PublishDate::Asap => Ok(format!("{:?}T00:00:00Z", today)),
-            PublishDate::Coming(wd) => Ok(format!(
-                "{:?}T{}Z",
-                date_compute::coming_weekday(today, wd.to_owned().parse()?),
-                self.publish_time
-            )),
+            PublishDate::Coming(wd) => {
+                let weekday = wd.parse().map_err(|source| OptionsError::ParseWeekday {
+                    weekday: wd.clone(),
+                    source,
+                })?;
+                Ok(format!(
+                    "{:?}T{}Z",
+                    date_compute::coming_weekday(today, weekday),
+                    self.publish_time
+                ))
+            }
             PublishDate::WeeksFromEpisode => Ok(format!(
                 "{:?}T{}Z",
                 date_compute::add_weeks(
-                    date_compute::parse_iso_date(&self.first_episode_date)?,
+                    self.parse_iso_date(&self.first_episode_date)?,
                     self.episode_nr()?,
                 ),
                 self.publish_time
             )),
             PublishDate::IsoDate(date) => Ok(format!(
                 "{:?}T{}Z",
-                date_compute::parse_iso_date(date)?,
+                self.parse_iso_date(date)?,
                 self.publish_time
             )),
             PublishDate::IsoDateTime(datetime) => Ok(format!(
                 "{:?}Z",
-                date_compute::parse_iso_datetime(datetime)?
+                date_compute::parse_iso_datetime(datetime).map_err(|source| {
+                    OptionsError::ParseDate {
+                        date: datetime.clone(),
+                        source,
+                    }
+                })?
             )),
         }
+    }
+
+    /// Parse an ISO 8601 date, reporting which value failed to parse.
+    fn parse_iso_date(&self, date: &str) -> Result<chrono::NaiveDate, OptionsError> {
+        date_compute::parse_iso_date(date).map_err(|source| OptionsError::ParseDate {
+            date: date.to_string(),
+            source,
+        })
     }
 
     /// If title is given use it, otherwise create from filename
@@ -261,13 +322,35 @@ impl UploadOptions {
 
     /// If episode_nr is given use it, otherwise
     /// try to convert first two chars in title from hex to `u8`
-    pub fn episode_nr(&self) -> anyhow::Result<u8> {
+    pub fn episode_nr(&self) -> Result<u8, OptionsError> {
         if let Some(episode_nr) = self.episode_nr {
             Ok(episode_nr)
         } else {
             let number = self.title().chars().take(2).collect::<String>();
-            std::primitive::u8::from_str_radix(&number, 16)
-                .map_err(|_| anyhow::anyhow!("first two digits of title should be hex-number."))
+            std::primitive::u8::from_str_radix(&number, 16).map_err(|_| {
+                OptionsError::EpisodeNrNotHex {
+                    title: self.title(),
+                }
+            })
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_unknown_publish_method_names_input_and_choices() {
+        let err = "bogus=1".parse::<PublishDate>().unwrap_err().to_string();
+        assert!(err.contains("`bogus`"), "{err}");
+        assert!(err.contains("asap"), "{err}");
+        assert!(err.contains("iso-date-time"), "{err}");
+    }
+
+    #[test]
+    fn test_publish_date_key_value() {
+        assert!(matches!("asap".parse(), Ok(PublishDate::Asap)));
+        assert!(matches!("coming=friday".parse(), Ok(PublishDate::Coming(day)) if day == "friday"));
     }
 }

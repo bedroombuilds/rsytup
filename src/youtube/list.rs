@@ -1,10 +1,12 @@
 //! Helper functions for listing all uploaded videos
 use std::collections::HashMap;
 
-use anyhow::Context;
 use chrono::{DateTime, Utc};
+use exn::{OptionExt, Result, bail};
 use futures_util::future;
 use serde::Serialize;
+
+use super::{ApiResultExt, YoutubeError};
 
 /// Maximum page size the `playlistItems` endpoint accepts.
 const PAGE_SIZE: u32 = 50;
@@ -26,42 +28,41 @@ pub struct YtVideoInfo {
 
 impl YtVideoInfo {
     /// Attention: do not use that in a loop, API call quota is limited
-    pub async fn from_id(cl: &super::Hub, video_id: &str) -> anyhow::Result<Self> {
+    pub async fn from_id(cl: &super::Hub, video_id: &str) -> Result<Self, YoutubeError> {
         let part = vec!["snippet".into(), "contentDetails".into(), "status".into()];
-        let resp = cl
+        let (_, response) = cl
             .videos()
             .list(&part)
             .add_id(video_id)
             .add_scopes(super::SCOPES)
             .doit()
-            .await?;
-        if let Some(video) = resp.1.items.as_ref().unwrap().iter().take(1).next() {
-            let privacy_status = video
-                .status
-                .as_ref()
-                .and_then(|status| status.privacy_status.clone());
-            let vsnip = video.snippet.as_ref().unwrap().clone();
-            let duration = video
-                .content_details
-                .as_ref()
-                .and_then(|details| details.duration.clone());
-            Ok(Self {
-                id: video_id.to_string(),
-                title: vsnip.title.unwrap(),
-                description: vsnip.description,
-                published_at: vsnip.published_at,
-                privacy_status,
-                url: format!("https://www.youtube.com/watch?v={video_id}"),
-                duration,
-            })
-        } else {
-            anyhow::bail!("video not found")
-        }
+            .await
+            .or_raise_api(|| format!("fetching video {video_id}"))?;
+        let Some(video) = response.items.unwrap_or_default().into_iter().next() else {
+            bail!(YoutubeError::not_found(format!(
+                "fetching video {video_id}"
+            )));
+        };
+        let unexpected = || {
+            YoutubeError::unexpected(format!(
+                "video {video_id} was returned without a snippet title"
+            ))
+        };
+        let vsnip = video.snippet.ok_or_raise(unexpected)?;
+        Ok(Self {
+            id: video_id.to_string(),
+            title: vsnip.title.ok_or_raise(unexpected)?,
+            description: vsnip.description,
+            published_at: vsnip.published_at,
+            privacy_status: video.status.and_then(|status| status.privacy_status),
+            url: format!("https://www.youtube.com/watch?v={video_id}"),
+            duration: video.content_details.and_then(|details| details.duration),
+        })
     }
 }
 
 /// Resolve the "uploads" playlist of the authenticated user's channel.
-async fn uploads_playlist_id(hub: &super::Hub) -> anyhow::Result<String> {
+async fn uploads_playlist_id(hub: &super::Hub) -> Result<String, YoutubeError> {
     let (_, response) = hub
         .channels()
         .list(&vec!["contentDetails".into()])
@@ -69,27 +70,34 @@ async fn uploads_playlist_id(hub: &super::Hub) -> anyhow::Result<String> {
         .add_scopes(super::SCOPES)
         .doit()
         .await
-        .context("listing the authenticated user's channels")?;
+        .or_raise_api(|| "listing the authenticated user's channels")?;
 
     let channel = response
         .items
         .unwrap_or_default()
         .into_iter()
         .next()
-        .context("the authenticated account has no YouTube channel")?;
+        .ok_or_raise(|| {
+            YoutubeError::no_uploads("the authenticated account has no YouTube channel")
+        })?;
+    let channel_id = channel.id.unwrap_or_default();
 
     channel
         .content_details
         .and_then(|details| details.related_playlists)
         .and_then(|playlists| playlists.uploads)
-        .context("the channel does not expose an uploads playlist")
+        .ok_or_raise(|| {
+            YoutubeError::no_uploads(format!(
+                "channel {channel_id} does not expose an uploads playlist"
+            ))
+        })
 }
 
 /// List the account's uploaded videos, newest first, at most `limit` of them.
 pub async fn list_uploads(
     hub: &super::Hub,
     limit: Option<usize>,
-) -> anyhow::Result<Vec<YtVideoInfo>> {
+) -> Result<Vec<YtVideoInfo>, YoutubeError> {
     if limit == Some(0) {
         return Ok(Vec::new());
     }
@@ -119,10 +127,13 @@ pub async fn list_uploads(
             call = call.page_token(token);
         }
 
-        let (_, response) = call
-            .doit()
-            .await
-            .context("listing items of the uploads playlist")?;
+        let (_, response) = call.doit().await.or_raise_api(|| {
+            format!(
+                "listing items of uploads playlist {playlist_id} (page token {}, {} items fetched so far)",
+                page_token.as_deref().unwrap_or("<first page>"),
+                uploads.len()
+            )
+        })?;
 
         for item in response.items.unwrap_or_default() {
             let content_details = item.content_details.unwrap_or_default();
@@ -173,7 +184,7 @@ pub async fn list_uploads(
 async fn fetch_durations(
     hub: &super::Hub,
     ids: &[&str],
-) -> anyhow::Result<HashMap<String, String>> {
+) -> Result<HashMap<String, String>, YoutubeError> {
     let requests = ids.chunks(ID_BATCH).map(|batch| async move {
         let mut call = hub
             .videos()
@@ -182,9 +193,14 @@ async fn fetch_durations(
         for id in batch {
             call = call.add_id(id);
         }
-        call.doit()
-            .await
-            .context("fetching content details of the listed videos")
+        call.doit().await.or_raise_api(|| {
+            format!(
+                "fetching content details of {} videos ({}..{})",
+                batch.len(),
+                batch.first().unwrap_or(&""),
+                batch.last().unwrap_or(&"")
+            )
+        })
     });
 
     let mut durations = HashMap::new();
@@ -308,8 +324,9 @@ pub fn print_table(uploads: &[YtVideoInfo]) {
     }
 }
 
-pub fn print_json(uploads: &[YtVideoInfo]) -> anyhow::Result<()> {
-    let json = serde_json::to_string_pretty(uploads).context("serializing uploads to JSON")?;
+pub fn print_json(uploads: &[YtVideoInfo]) {
+    // Serializing only fails for non-string map keys or a failing custom
+    // `Serialize` impl, neither of which `YtVideoInfo` has.
+    let json = serde_json::to_string_pretty(uploads).expect("YtVideoInfo always serializes");
     println!("{json}");
-    Ok(())
 }
